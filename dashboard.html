@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Tracker — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="js/auth.js"></script>
+<style>
+:root {
+  --bg:#06060b;--bg2:#0d0d14;--bg3:#13131d;--bg4:#1a1a28;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1);
+  --text:#e2e2ef;--muted:#5e5e78;
+  --amber:#f59e0b;--teal:#06b6d4;--coral:#ef4444;--purple:#8b5cf6;--green:#22c55e;--blue:#3b82f6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.35}
+.grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(6,182,212,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(245,158,11,0.02) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+.content{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
+::selection{background:var(--teal);color:#000}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:rgba(6,6,11,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--teal),var(--amber));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:#000}
+.topbar-title{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:#fff;letter-spacing:-0.02em}
+.topbar-title span{color:var(--teal)}
+.topbar-right{display:flex;gap:8px}
+.tb{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:7px 14px;border-radius:7px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;letter-spacing:.03em;text-decoration:none}
+.tb:hover{border-color:var(--amber);color:var(--amber)}
+.tb.back{background:var(--amber);border-color:var(--amber);color:#000}
+
+/* LAYOUT */
+.dash-layout{display:grid;grid-template-columns:320px 1fr;flex:1;overflow:hidden}
+@media(max-width:900px){.dash-layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}}
+
+/* LEFT: AI CHAT */
+.chat-panel{border-right:1px solid var(--border);display:flex;flex-direction:column;height:calc(100vh - 53px);background:var(--bg2)}
+.chat-header{padding:16px 18px;border-bottom:1px solid var(--border)}
+.chat-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--teal);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.chat-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#fff}
+.chat-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.chat-status{margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--teal);text-transform:uppercase}
+.chat-messages{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.chat-messages::-webkit-scrollbar{width:4px}
+.chat-messages::-webkit-scrollbar-track{background:transparent}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.msg{max-width:92%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.55;word-wrap:break-word;white-space:pre-wrap}
+.msg-user{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.15);color:var(--text);align-self:flex-end;border-bottom-right-radius:4px}
+.msg-ai{background:var(--bg3);border:1px solid var(--border);color:var(--text);align-self:flex-start;border-bottom-left-radius:4px}
+.msg-ai .msg-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;display:block}
+.msg-system{background:rgba(6,182,212,0.05);border:1px solid rgba(6,182,212,0.1);color:var(--muted);font-size:11px;align-self:center;text-align:center;border-radius:8px;padding:6px 12px}
+.msg-loading{display:flex;gap:4px;padding:12px 16px;align-self:flex-start}
+.msg-loading span{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:bounce .6s infinite alternate}
+.msg-loading span:nth-child(2){animation-delay:.15s}
+.msg-loading span:nth-child(3){animation-delay:.3s}
+@keyframes bounce{to{opacity:.3;transform:translateY(-4px)}}
+
+.chat-input-wrap{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px}
+.chat-input{flex:1;padding:10px 14px;border-radius:10px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+.chat-input:focus{border-color:var(--teal)}
+.chat-send{width:40px;height:40px;border-radius:10px;border:none;background:var(--teal);color:#000;font-size:16px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center}
+.chat-send:hover{background:#22d3ee;transform:scale(1.05)}
+.chat-send:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* Quick action buttons */
+.chat-actions{padding:6px 14px 8px;display:flex;gap:5px;flex-wrap:wrap}
+.qa-btn{font-family:'JetBrains Mono',monospace;font-size:9px;padding:4px 10px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;letter-spacing:.02em}
+.qa-btn:hover{border-color:var(--teal);color:var(--teal)}
+
+/* RIGHT: DASHBOARD */
+.dash-content{height:calc(100vh - 53px);overflow-y:auto;padding:24px 28px}
+.dash-content::-webkit-scrollbar{width:5px}
+.dash-content::-webkit-scrollbar-track{background:transparent}
+.dash-content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* SECTION TITLES */
+.sec-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;margin-bottom:4px}
+.sec-sub{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:.04em;margin-bottom:16px}
+.section{margin-bottom:32px}
+
+/* STAT CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:24px}
+.s-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 16px;transition:border-color .2s}
+.s-card:hover{border-color:var(--border2)}
+.s-card .s-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;line-height:1}
+.s-card .s-label{font-size:10px;color:var(--muted);margin-top:3px;font-family:'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
+.s-card.amber{border-color:rgba(245,158,11,0.2)}.s-card.amber .s-val{color:var(--amber)}
+.s-card.teal{border-color:rgba(6,182,212,0.2)}.s-card.teal .s-val{color:var(--teal)}
+.s-card.green{border-color:rgba(34,197,94,0.2)}.s-card.green .s-val{color:var(--green)}
+.s-card.purple{border-color:rgba(139,92,246,0.2)}.s-card.purple .s-val{color:var(--purple)}
+
+/* CHART CONTAINERS */
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+@media(max-width:1100px){.chart-row{grid-template-columns:1fr}}
+.chart-box{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:18px;position:relative}
+.chart-box .ch-title{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+.chart-box canvas{width:100%!important;max-height:240px}
+
+/* REPORT HISTORY */
+.history-table{width:100%;border-collapse:collapse}
+.history-table th{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;text-align:left;padding:8px 10px;border-bottom:1px solid var(--border2)}
+.history-table td{padding:10px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+.history-table tr:hover td{background:rgba(255,255,255,0.02)}
+.h-date{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--teal)}
+.h-hours{font-family:'Syne',sans-serif;font-weight:700;font-size:15px}
+.h-focus{font-size:12px;color:var(--text)}
+.h-mood{font-size:16px}
+.h-tasks{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--amber)}
+.h-del{width:30px;height:30px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:12px;transition:all .15s}
+.h-del:hover{border-color:var(--coral);color:var(--coral);background:rgba(239,68,68,0.05)}
+.no-data{text-align:center;padding:32px;color:var(--muted);font-size:13px}
+
+/* MILESTONES */
+.mile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.mile-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start;transition:all .2s}
+.mile-card.done{border-color:rgba(34,197,94,0.2);background:rgba(34,197,94,0.03)}
+.mile-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.mile-info .mile-title{font-size:13px;font-weight:600;color:#fff}
+.mile-info .mile-desc{font-size:11px;color:var(--muted);margin-top:1px}
+.mile-pts{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;margin-top:3px}
+.mile-card.done .mile-pts{color:var(--green)}
+.mile-card:not(.done) .mile-pts{color:var(--muted)}
+
+/* REWARDS HISTORY */
+.rw-list{display:flex;flex-direction:column;gap:6px}
+.rw-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;border:1px solid var(--border);font-size:12px}
+.rw-item.reward{border-color:rgba(34,197,94,0.15);background:rgba(34,197,94,0.03)}
+.rw-item.punishment{border-color:rgba(239,68,68,0.15);background:rgba(239,68,68,0.03)}
+.rw-icon{font-size:16px;flex-shrink:0}
+.rw-title{font-weight:600;color:#fff;flex:1}
+.rw-pts{font-family:'JetBrains Mono',monospace;font-weight:700}
+.rw-item.reward .rw-pts{color:var(--green)}
+.rw-item.punishment .rw-pts{color:var(--coral)}
+.rw-date{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
+
+/* SUMMARIES */
+.summary-columns{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.summary-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px}
+.summary-box-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.summary-item{padding:12px;border-radius:10px;background:var(--bg4);border:1px solid var(--border);margin-bottom:10px}
+.summary-item:last-child{margin-bottom:0}
+.summary-item-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px}
+.summary-item-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--teal);margin-bottom:8px}
+.summary-item-text{font-size:12px;color:var(--muted);line-height:1.6}
+@media(max-width:1100px){.summary-columns{grid-template-columns:1fr}}
+
+/* TABS */
+.tab-row{display:flex;gap:4px;margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:8px}
+.tab-btn{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:6px 14px;border-radius:6px 6px 0 0;border:1px solid transparent;border-bottom:none;background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;letter-spacing:.04em}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{background:var(--bg3);border-color:var(--border2);color:var(--teal)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* CONFIRM DIALOG */
+.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.confirm-overlay.active{opacity:1;pointer-events:all}
+.confirm-box{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:24px;width:min(380px,90vw);text-align:center}
+.confirm-box .cf-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:#fff;margin-bottom:6px}
+.confirm-box .cf-desc{font-size:13px;color:var(--muted);margin-bottom:18px}
+.cf-btns{display:flex;gap:10px;justify-content:center}
+.cf-btn{padding:9px 22px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.cf-btn:hover{border-color:var(--text);color:var(--text)}
+.cf-btn.danger{background:var(--coral);border-color:var(--coral);color:#fff}
+.cf-btn.danger:hover{background:#dc2626}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="content">
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo">S</div>
+    <div class="topbar-title"><span id="dashUsername" style="color:var(--amber)">...</span>'s <span>AI</span> Tracker</div>
+  </div>
+  <div class="topbar-right">
+    <button class="tb" id="apiKeyBtn" onclick="toggleApiModal()" style="cursor:pointer">⚙ API Key</button>
+    <a href="index.html" class="tb back">← Roadmap</a>
+    <button class="tb" onclick="Auth.signOut()" style="cursor:pointer">Logout</button>
+  </div>
+</div>
+
+<!-- API KEY MODAL -->
+<div id="apiModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;backdrop-filter:blur(4px);align-items:center;justify-content:center">
+  <div style="background:#0d0d14;border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:28px;width:100%;max-width:440px;margin:20px">
+    <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#fff;margin-bottom:4px">OpenAI API Key</div>
+    <div style="font-size:12px;color:#5e5e78;font-family:'JetBrains Mono',monospace;margin-bottom:20px">Stored in your browser only. Never sent anywhere except OpenAI.</div>
+    <div style="font-size:10px;color:#5e5e78;text-transform:uppercase;letter-spacing:.08em;font-family:'JetBrains Mono',monospace;margin-bottom:6px">API Key</div>
+    <input id="apiKeyInput" type="password" placeholder="sk-proj-..." autocomplete="off"
+      style="width:100%;padding:10px 14px;background:#13131d;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#e2e2ef;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;margin-bottom:14px;box-sizing:border-box"
+      onfocus="this.style.borderColor='#f59e0b'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+    <div id="apiKeyStatus" style="font-size:11px;margin-bottom:14px;font-family:'JetBrains Mono',monospace;min-height:16px"></div>
+    <div style="display:flex;gap:8px">
+      <button onclick="saveApiKey()" style="flex:1;padding:10px;background:#f59e0b;color:#000;border:none;border-radius:7px;font-weight:800;font-size:13px;cursor:pointer;font-family:'Outfit',sans-serif">Save Key</button>
+      <button onclick="clearApiKey()" style="padding:10px 16px;background:transparent;color:#ef4444;border:1px solid rgba(239,68,68,.3);border-radius:7px;font-size:13px;cursor:pointer;font-family:'Outfit',sans-serif">Clear</button>
+      <button onclick="toggleApiModal()" style="padding:10px 16px;background:transparent;color:#5e5e78;border:1px solid rgba(255,255,255,.08);border-radius:7px;font-size:13px;cursor:pointer;font-family:'Outfit',sans-serif">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleApiModal() {
+  const modal = document.getElementById('apiModal');
+  const isOpen = modal.style.display === 'flex';
+  modal.style.display = isOpen ? 'none' : 'flex';
+  if (!isOpen) {
+    // Show masked current key if exists
+    const existing = localStorage.getItem('openai_api_key') || '';
+    const input = document.getElementById('apiKeyInput');
+    input.value = existing;
+    input.placeholder = existing ? 'sk-proj-••••••••••••' : 'sk-proj-...';
+    updateApiStatus();
+  }
+}
+
+function updateApiStatus() {
+  const key = localStorage.getItem('openai_api_key') || '';
+  const el = document.getElementById('apiKeyStatus');
+  const btn = document.getElementById('apiKeyBtn');
+  if (key && key.startsWith('sk-')) {
+    el.style.color = '#22c55e';
+    el.textContent = '✓ API key is configured — AI mentor is using OpenAI';
+    btn.style.color = '#22c55e';
+    btn.style.borderColor = '#22c55e';
+  } else {
+    el.style.color = '#5e5e78';
+    el.textContent = 'No key set — AI mentor runs in built-in mode';
+    btn.style.color = '';
+    btn.style.borderColor = '';
+  }
+}
+
+function saveApiKey() {
+  const val = document.getElementById('apiKeyInput').value.trim();
+  if (!val) {
+    document.getElementById('apiKeyStatus').style.color = '#ef4444';
+    document.getElementById('apiKeyStatus').textContent = 'Please enter your API key.';
+    return;
+  }
+  if (!val.startsWith('sk-')) {
+    document.getElementById('apiKeyStatus').style.color = '#ef4444';
+    document.getElementById('apiKeyStatus').textContent = 'Invalid key — OpenAI keys start with "sk-"';
+    return;
+  }
+  localStorage.setItem('openai_api_key', val);
+  if (window.AIChat) AIChat.setApiKey(val);
+  updateApiStatus();
+  document.getElementById('apiKeyStatus').style.color = '#22c55e';
+  document.getElementById('apiKeyStatus').textContent = '✓ Saved! AI mentor will now use your OpenAI key.';
+  setTimeout(() => toggleApiModal(), 1200);
+}
+
+function clearApiKey() {
+  localStorage.removeItem('openai_api_key');
+  document.getElementById('apiKeyInput').value = '';
+  if (window.AIChat) AIChat.clearApiKey();
+  updateApiStatus();
+}
+
+// Show status on load
+document.addEventListener('DOMContentLoaded', updateApiStatus);
+</script>
+<script>
+(async function(){
+  const user = await Auth.requireAuth();
+  if (!user) return;
+  const el = document.getElementById('dashUsername');
+  if (el) el.textContent = user.fullName || user.username;
+})();
+</script>
+
+<!-- MAIN LAYOUT -->
+<div class="dash-layout">
+
+  <!-- LEFT: AI CHAT -->
+  <div class="chat-panel">
+    <div class="chat-header">
+      <div class="chat-label">AI Mentor</div>
+      <div class="chat-title">Chat with AI</div>
+      <div class="chat-sub">Ask questions, get feedback, request reports</div>
+      <div class="chat-status" id="chatStatus">Checking mentor mode...</div>
+    </div>
+    <div class="chat-actions">
+      <button class="qa-btn" onclick="quickAction('biweekly')">📊 Bi-weekly Report</button>
+      <button class="qa-btn" onclick="quickAction('monthly')">📈 Monthly Report</button>
+      <button class="qa-btn" onclick="quickAction('advice')">💡 What should I focus on?</button>
+      <button class="qa-btn" onclick="quickAction('motivation')">🔥 Motivate me</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg msg-ai">
+        <span class="msg-label">AI Mentor</span>
+        Hello, Shahriyor! Have a nice day. I'm your AI learning mentor — ask me anything about your roadmap, request performance reports, or get advice on what to study next.
+      </div>
+    </div>
+    <div class="chat-input-wrap">
+      <input type="text" class="chat-input" id="chatInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="chat-send" id="chatSendBtn" onclick="sendChat()">→</button>
+    </div>
+  </div>
+
+  <!-- RIGHT: DASHBOARD -->
+  <div class="dash-content">
+
+    <!-- STATS -->
+    <div class="section">
+      <div class="sec-title">Performance Overview</div>
+      <div class="sec-sub">Your learning metrics at a glance</div>
+      <div class="stat-grid">
+        <div class="s-card amber"><div class="s-val" id="dTotalDays">0</div><div class="s-label">Days Logged</div></div>
+        <div class="s-card teal"><div class="s-val" id="dTotalHours">0</div><div class="s-label">Total Hours</div></div>
+        <div class="s-card green"><div class="s-val" id="dStreak">0</div><div class="s-label">Day Streak</div></div>
+        <div class="s-card purple"><div class="s-val" id="dAvgHours">0</div><div class="s-label">Avg Hours/Day</div></div>
+        <div class="s-card"><div class="s-val" id="dTotalTasks">0</div><div class="s-label">Tasks Done</div></div>
+        <div class="s-card"><div class="s-val" id="dTotalPoints">0</div><div class="s-label">Total Points</div></div>
+        <div class="s-card"><div class="s-val" id="dWeeklyReviews">0</div><div class="s-label">Weekly Reviews</div></div>
+        <div class="s-card"><div class="s-val" id="dProjectSummaries">0</div><div class="s-label">Project Summaries</div></div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="section">
+      <div class="chart-row">
+        <div class="chart-box">
+          <div class="ch-title">Hours Studied — Last 14 Days</div>
+          <canvas id="lineChart"></canvas>
+        </div>
+        <div class="chart-box">
+          <div class="ch-title">Skill Radar</div>
+          <canvas id="radarChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABS: History, Milestones, Rewards -->
+    <div class="section">
+      <div class="tab-row">
+        <button class="tab-btn active" onclick="switchTab('history')">Report History</button>
+        <button class="tab-btn" onclick="switchTab('milestones')">Milestones</button>
+        <button class="tab-btn" onclick="switchTab('rewards')">Rewards & Punishments</button>
+        <button class="tab-btn" onclick="switchTab('summaries')">Summaries</button>
+      </div>
+
+      <!-- HISTORY TAB -->
+      <div class="tab-panel active" id="tab-history">
+        <table class="history-table">
+          <thead><tr><th>Date</th><th>Hours</th><th>Focus</th><th>Mood</th><th>Tasks</th><th>Week</th><th></th></tr></thead>
+          <tbody id="historyBody"><tr><td colspan="7" class="no-data">Loading reports...</td></tr></tbody>
+        </table>
+      </div>
+
+      <!-- MILESTONES TAB -->
+      <div class="tab-panel" id="tab-milestones">
+        <div class="mile-grid" id="milestonesGrid"><div class="no-data">Loading milestones...</div></div>
+      </div>
+
+      <!-- REWARDS TAB -->
+      <div class="tab-panel" id="tab-rewards">
+        <div class="rw-list" id="rewardsList"><div class="no-data">Loading rewards...</div></div>
+      </div>
+
+      <div class="tab-panel" id="tab-summaries">
+        <div class="summary-columns">
+          <div class="summary-box">
+            <div class="summary-box-title">Weekly Reviews</div>
+            <div id="weeklySummaryList"><div class="no-data">Loading weekly reviews...</div></div>
+          </div>
+          <div class="summary-box">
+            <div class="summary-box-title">Project Summaries</div>
+            <div id="projectSummaryList"><div class="no-data">Loading project summaries...</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /dash-content -->
+</div><!-- /dash-layout -->
+</div><!-- /content -->
+
+<!-- CONFIRM DIALOG -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="cf-title">Delete this report?</div>
+    <div class="cf-desc">This action cannot be undone. Are you sure you want to delete this daily report?</div>
+    <div class="cf-btns">
+      <button class="cf-btn" onclick="closeConfirm()">Cancel</button>
+      <button class="cf-btn danger" id="confirmDeleteBtn" onclick="confirmDelete()">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/supabase-client.js"></script>
+<script src="js/openai.js"></script>
+<script src="js/db-bootstrap.js"></script>
+<script>
+// ---- STATE ----
+let lineChartInstance = null;
+let radarChartInstance = null;
+let deleteTargetId = null;
+
+// ---- MOOD MAP ----
+const moodEmoji = { great:'🔥', good:'😊', okay:'😐', tired:'😩', burned_out:'💀' };
+
+// ---- TABS ----
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+
+// ---- LOAD STATS ----
+async function loadStats() {
+  const stats = await window.DB.DailyLogs.getStats();
+  document.getElementById('dTotalDays').textContent = stats.totalDays;
+  document.getElementById('dTotalHours').textContent = stats.totalHours;
+  document.getElementById('dStreak').textContent = stats.currentStreak;
+  document.getElementById('dAvgHours').textContent = stats.avgHours;
+  document.getElementById('dTotalTasks').textContent = stats.totalTasks;
+
+  const { data: logs } = await window.DB.DailyLogs.getAll();
+  const { data: rewards } = await window.DB.RewardsLog.getAll();
+  const { data: weeklyReports } = await window.DB.WeeklyReports.getAll();
+  const { data: projectSummaries } = await window.DB.ProjectSummaries.getAll();
+  let pts = 0;
+  if (rewards) rewards.forEach(r => pts += (r.points || 0));
+  if (logs) logs.forEach(log => pts += ((log.checklist && log.checklist.totalPoints) || 0));
+  document.getElementById('dTotalPoints').textContent = pts;
+  document.getElementById('dWeeklyReviews').textContent = (weeklyReports || []).length;
+  document.getElementById('dProjectSummaries').textContent = (projectSummaries || []).length;
+}
+
+// ---- LOAD LINE CHART ----
+async function loadLineChart() {
+  const { data } = await window.DB.DailyLogs.getRecent(14);
+  const labels = data.map(d => {
+    const dt = new Date(d.log_date);
+    return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  });
+  const hours = data.map(d => parseFloat(d.hours_spent) || 0);
+  const tasks = data.map(d => d.tasks_completed || 0);
+
+  if (lineChartInstance) lineChartInstance.destroy();
+
+  const ctx = document.getElementById('lineChart').getContext('2d');
+  lineChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Hours',
+          data: hours,
+          borderColor: '#f59e0b',
+          backgroundColor: 'rgba(245,158,11,0.08)',
+          fill: true,
+          tension: 0.35,
+          pointBackgroundColor: '#f59e0b',
+          pointRadius: 4,
+          borderWidth: 2
+        },
+        {
+          label: 'Tasks',
+          data: tasks,
+          borderColor: '#06b6d4',
+          backgroundColor: 'rgba(6,182,212,0.05)',
+          fill: true,
+          tension: 0.35,
+          pointBackgroundColor: '#06b6d4',
+          pointRadius: 3,
+          borderWidth: 2
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, labels: { color: '#5e5e78', font: { family: 'JetBrains Mono', size: 10 } } }
+      },
+      scales: {
+        x: { ticks: { color: '#5e5e78', font: { family: 'JetBrains Mono', size: 9 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+        y: { ticks: { color: '#5e5e78', font: { family: 'JetBrains Mono', size: 9 } }, grid: { color: 'rgba(255,255,255,0.04)' }, beginAtZero: true }
+      }
+    }
+  });
+}
+
+// ---- LOAD RADAR CHART ----
+async function loadRadarChart() {
+  const { data } = await window.DB.UserSkills.getAll();
+  const labels = data.map(s => s.skill_name);
+  const values = data.map(s => s.skill_level);
+
+  if (radarChartInstance) radarChartInstance.destroy();
+
+  const ctx = document.getElementById('radarChart').getContext('2d');
+  radarChartInstance = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Skill Level',
+        data: values,
+        borderColor: '#06b6d4',
+        backgroundColor: 'rgba(6,182,212,0.12)',
+        pointBackgroundColor: '#06b6d4',
+        borderWidth: 2,
+        pointRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        r: {
+          beginAtZero: true,
+          max: 100,
+          ticks: { color: '#5e5e78', font: { family: 'JetBrains Mono', size: 8 }, backdropColor: 'transparent', stepSize: 20 },
+          grid: { color: 'rgba(255,255,255,0.06)' },
+          pointLabels: { color: '#e2e2ef', font: { family: 'DM Sans', size: 11, weight: 600 } }
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+// ---- LOAD HISTORY ----
+async function loadHistory() {
+  const { data } = await window.DB.DailyLogs.getAll();
+  const tbody = document.getElementById('historyBody');
+  if (!data || data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" class="no-data">No reports yet. Submit your first daily report from the roadmap page!</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(d => `
+    <tr>
+      <td class="h-date">${new Date(d.log_date).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })}</td>
+      <td class="h-hours">${d.hours_spent}h</td>
+      <td class="h-focus">${d.focus_area || '-'}</td>
+      <td class="h-mood">${moodEmoji[d.mood] || '😐'}</td>
+      <td class="h-tasks">${d.tasks_completed || 0}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)">W${d.week_number || '?'}</td>
+      <td><button class="h-del" onclick="requestDelete('${d.id}')" title="Delete">🗑</button></td>
+    </tr>
+  `).join('');
+}
+
+// ---- DELETE CONFIRM ----
+function requestDelete(id) {
+  deleteTargetId = id;
+  document.getElementById('confirmOverlay').classList.add('active');
+}
+function closeConfirm() {
+  deleteTargetId = null;
+  document.getElementById('confirmOverlay').classList.remove('active');
+}
+async function confirmDelete() {
+  if (!deleteTargetId) return;
+  await window.DB.DailyLogs.delete(deleteTargetId);
+  closeConfirm();
+  loadAll();
+}
+
+// ---- LOAD MILESTONES ----
+async function loadMilestones() {
+  const { data } = await window.DB.Milestones.getAll();
+  const grid = document.getElementById('milestonesGrid');
+  if (!data || data.length === 0) {
+    grid.innerHTML = '<div class="no-data">No milestones found.</div>';
+    return;
+  }
+  grid.innerHTML = data.map(m => `
+    <div class="mile-card ${m.is_completed ? 'done' : ''}">
+      <div class="mile-icon">${m.is_completed ? '✅' : (m.milestone_type === 'project' ? '🚀' : '📅')}</div>
+      <div class="mile-info">
+        <div class="mile-title">${m.title}</div>
+        <div class="mile-desc">${m.description || ''}</div>
+        <div class="mile-pts">${m.is_completed ? 'Earned' : 'Locked'}: ${m.points} pts</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ---- LOAD REWARDS ----
+async function loadRewards() {
+  const { data } = await window.DB.RewardsLog.getAll();
+  const list = document.getElementById('rewardsList');
+  if (!data || data.length === 0) {
+    list.innerHTML = '<div class="no-data">No rewards or punishments yet. Start submitting daily reports!</div>';
+    return;
+  }
+  list.innerHTML = data.map(r => `
+    <div class="rw-item ${r.log_type}">
+      <div class="rw-icon">${r.log_type === 'reward' ? '🏆' : '⚠️'}</div>
+      <div class="rw-title">${r.title}</div>
+      <div class="rw-pts">${r.points > 0 ? '+' : ''}${r.points}</div>
+      <div class="rw-date">${new Date(r.created_at).toLocaleDateString('en-US', { month:'short', day:'numeric' })}</div>
+    </div>
+  `).join('');
+}
+
+async function loadSummaries() {
+  const weeklyContainer = document.getElementById('weeklySummaryList');
+  const projectContainer = document.getElementById('projectSummaryList');
+  const { data: weeklyReports } = await window.DB.WeeklyReports.getAll();
+  const { data: projectSummaries } = await window.DB.ProjectSummaries.getAll();
+
+  if (!weeklyReports || weeklyReports.length === 0) {
+    weeklyContainer.innerHTML = '<div class="no-data">No weekly reviews synced yet.</div>';
+  } else {
+    weeklyContainer.innerHTML = weeklyReports.map(item => `
+      <div class="summary-item">
+        <div class="summary-item-title">${item.title || `Week ${item.week_number} Review`}</div>
+        <div class="summary-item-meta">WEEK ${item.week_number} • ${new Date(item.updated_at || item.created_at).toLocaleDateString('en-US', { month:'short', day:'numeric' })}</div>
+        <div class="summary-item-text">${escapeHtml(item.summary_text || 'No written summary yet.')}</div>
+      </div>
+    `).join('');
+  }
+
+  if (!projectSummaries || projectSummaries.length === 0) {
+    projectContainer.innerHTML = '<div class="no-data">No project summaries synced yet.</div>';
+  } else {
+    projectContainer.innerHTML = projectSummaries.map(item => `
+      <div class="summary-item">
+        <div class="summary-item-title">${item.project_name || item.title || `Project ${item.project_number}`}</div>
+        <div class="summary-item-meta">PROJECT ${item.project_number} • ${new Date(item.updated_at || item.created_at).toLocaleDateString('en-US', { month:'short', day:'numeric' })}</div>
+        <div class="summary-item-text">${escapeHtml(item.summary_text || 'No written summary yet.')}</div>
+      </div>
+    `).join('');
+  }
+}
+
+// ---- AI CHAT ----
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  input.value = '';
+  addMessage(msg, 'user');
+  showLoading();
+
+  const btn = document.getElementById('chatSendBtn');
+  btn.disabled = true;
+
+  // Gather context
+  const stats = await window.DB.DailyLogs.getStats();
+  const { data: recentLogs } = await window.DB.DailyLogs.getRecent(14);
+  const { data: skills } = await window.DB.UserSkills.getAll();
+  const context = { stats, recentLogs: recentLogs?.slice(-7), skills };
+
+  const result = await window.AIChat.sendMessage(msg, context);
+  hideLoading();
+
+  if (result.success) {
+    addMessage(result.message, 'ai');
+  } else {
+    addMessage('Sorry, I encountered an error. Please try again.', 'system');
+  }
+  btn.disabled = false;
+}
+
+async function quickAction(type) {
+  const btn = document.getElementById('chatSendBtn');
+  btn.disabled = true;
+
+  const stats = await window.DB.DailyLogs.getStats();
+  const { data: logs } = await window.DB.DailyLogs.getAll();
+  const { data: skills } = await window.DB.UserSkills.getAll();
+  const { data: milestones } = await window.DB.Milestones.getAll();
+  const { data: rewards } = await window.DB.RewardsLog.getAll();
+
+  let result;
+  if (type === 'biweekly') {
+    addMessage('📊 Generate bi-weekly performance report', 'user');
+    showLoading();
+    const { data: recent } = await window.DB.DailyLogs.getRecent(14);
+    result = await window.AIChat.getBiWeeklyReport(recent, skills, milestones);
+  } else if (type === 'monthly') {
+    addMessage('📈 Generate monthly performance report', 'user');
+    showLoading();
+    result = await window.AIChat.getMonthlyReport(logs, skills, milestones, rewards);
+  } else if (type === 'advice') {
+    addMessage('💡 What should I focus on today?', 'user');
+    showLoading();
+    result = await window.AIChat.sendMessage(
+      'Based on my current progress data, what specific topics should I focus on today? Consider my weak areas and the roadmap schedule.',
+      { stats, recentLogs: logs?.slice(0, 7), skills }
+    );
+  } else if (type === 'motivation') {
+    addMessage('🔥 I need motivation right now', 'user');
+    showLoading();
+    result = await window.AIChat.sendMessage(
+      'I need a motivational push. Look at my data — remind me why I started this and what I\'ve already accomplished. Be real but encouraging.',
+      { stats, skills }
+    );
+  }
+
+  hideLoading();
+  if (result && result.success) {
+    addMessage(result.message, 'ai');
+  } else {
+    addMessage('Could not generate report. Check your connection and try again.', 'system');
+  }
+  btn.disabled = false;
+}
+
+function addMessage(text, type) {
+  const container = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  if (type === 'user') {
+    div.className = 'msg msg-user';
+    div.textContent = text;
+  } else if (type === 'ai') {
+    div.className = 'msg msg-ai';
+    div.innerHTML = `<span class="msg-label">AI Mentor</span>${escapeHtml(text)}`;
+  } else {
+    div.className = 'msg msg-system';
+    div.textContent = text;
+  }
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function showLoading() {
+  const container = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'msg-loading';
+  div.id = 'chatLoading';
+  div.innerHTML = '<span></span><span></span><span></span>';
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+function hideLoading() {
+  const el = document.getElementById('chatLoading');
+  if (el) el.remove();
+}
+
+function escapeHtml(text) {
+  return String(text || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+let lastChatNotice = '';
+
+function updateChatStatus() {
+  const statusEl = document.getElementById('chatStatus');
+  if (!statusEl || !window.AIChat || typeof window.AIChat.getStatus !== 'function') return;
+
+  const status = window.AIChat.getStatus();
+  statusEl.textContent = status.message;
+  statusEl.style.color = status.mode === 'remote-ready' ? 'var(--green)' : 'var(--teal)';
+}
+
+function showChatNotice(notice) {
+  if (!notice || notice === lastChatNotice) return;
+  lastChatNotice = notice;
+  addMessage(notice, 'system');
+}
+
+async function gatherChatContext() {
+  if (!window.DB) return null;
+
+  try {
+    const stats = await window.DB.DailyLogs.getStats();
+    const { data: recentLogs } = await window.DB.DailyLogs.getRecent(14);
+    const { data: skills } = await window.DB.UserSkills.getAll();
+    const { data: milestones } = await window.DB.Milestones.getAll();
+    const { data: weeklyReports } = await window.DB.WeeklyReports.getAll();
+    const { data: projectSummaries } = await window.DB.ProjectSummaries.getAll();
+    return {
+      stats,
+      recentLogs: recentLogs?.slice(-7) || [],
+      skills: skills || [],
+      milestones: milestones || [],
+      weeklyReports: weeklyReports || [],
+      projectSummaries: projectSummaries || []
+    };
+  } catch (error) {
+    console.warn('Chat context fallback:', error);
+    return null;
+  }
+}
+
+async function gatherDashboardData() {
+  if (!window.DB) {
+    return { stats: null, logs: [], recent: [], skills: [], milestones: [], rewards: [] };
+  }
+
+  try {
+    const stats = await window.DB.DailyLogs.getStats();
+    const { data: logs } = await window.DB.DailyLogs.getAll();
+    const { data: recent } = await window.DB.DailyLogs.getRecent(14);
+    const { data: skills } = await window.DB.UserSkills.getAll();
+    const { data: milestones } = await window.DB.Milestones.getAll();
+    const { data: rewards } = await window.DB.RewardsLog.getAll();
+    const { data: weeklyReports } = await window.DB.WeeklyReports.getAll();
+    const { data: projectSummaries } = await window.DB.ProjectSummaries.getAll();
+
+    return {
+      stats,
+      logs: logs || [],
+      recent: recent || [],
+      skills: skills || [],
+      milestones: milestones || [],
+      rewards: rewards || [],
+      weeklyReports: weeklyReports || [],
+      projectSummaries: projectSummaries || []
+    };
+  } catch (error) {
+    console.warn('Dashboard data fallback:', error);
+    return { stats: null, logs: [], recent: [], skills: [], milestones: [], rewards: [], weeklyReports: [], projectSummaries: [] };
+  }
+}
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  input.value = '';
+  addMessage(msg, 'user');
+  showLoading();
+
+  const btn = document.getElementById('chatSendBtn');
+  btn.disabled = true;
+
+  try {
+    const context = await gatherChatContext();
+    const result = await window.AIChat.sendMessage(msg, context);
+    showChatNotice(result.notice);
+
+    if (result.success) {
+      addMessage(result.message, 'ai');
+    } else {
+      addMessage('Sorry, I encountered an error. Please try again.', 'system');
+    }
+  } catch (error) {
+    console.error('Chat send failed:', error);
+    addMessage('Chat is temporarily unavailable. Please try again.', 'system');
+  } finally {
+    hideLoading();
+    btn.disabled = false;
+  }
+}
+
+async function quickAction(type) {
+  const btn = document.getElementById('chatSendBtn');
+  btn.disabled = true;
+
+  try {
+    const { stats, logs, recent, skills, milestones, rewards, weeklyReports, projectSummaries } = await gatherDashboardData();
+    let result;
+
+    if (type === 'biweekly') {
+      addMessage('Generate bi-weekly performance report', 'user');
+      showLoading();
+      result = await window.AIChat.getBiWeeklyReport(recent, skills, milestones, weeklyReports, projectSummaries);
+    } else if (type === 'monthly') {
+      addMessage('Generate monthly performance report', 'user');
+      showLoading();
+      result = await window.AIChat.getMonthlyReport(logs, skills, milestones, rewards, weeklyReports, projectSummaries);
+    } else if (type === 'advice') {
+      addMessage('What should I focus on today?', 'user');
+      showLoading();
+      result = await window.AIChat.sendMessage(
+        'Based on my current progress data, what specific topics should I focus on today? Consider my weak areas and the roadmap schedule.',
+        { stats, recentLogs: logs?.slice(-7) || [], skills, weeklyReports, projectSummaries }
+      );
+    } else if (type === 'motivation') {
+      addMessage('I need motivation right now', 'user');
+      showLoading();
+      result = await window.AIChat.sendMessage(
+        'I need a motivational push. Look at my data, remind me why I started this and what I have already accomplished. Be real but encouraging.',
+        { stats, skills, milestones, rewards, weeklyReports, projectSummaries }
+      );
+    }
+
+    showChatNotice(result?.notice);
+
+    if (result && result.success) {
+      addMessage(result.message, 'ai');
+    } else {
+      addMessage('Could not generate a response right now. Please try again.', 'system');
+    }
+  } catch (error) {
+    console.error('Quick action failed:', error);
+    addMessage('Quick action failed. Please try again.', 'system');
+  } finally {
+    hideLoading();
+    btn.disabled = false;
+  }
+}
+
+// ---- LOAD ALL ----
+async function loadAll() {
+  await Promise.all([
+    loadStats(),
+    loadLineChart(),
+    loadRadarChart(),
+    loadHistory(),
+    loadMilestones(),
+    loadRewards(),
+    loadSummaries()
+  ]);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateChatStatus();
+  loadAll();
+});
+</script>
+</body>
+</html>

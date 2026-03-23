@@ -1,0 +1,2569 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI/ML Engineer — 8-Week Mission</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Manrope:wght@400;500;700;800&family=Outfit:wght@500;700;800&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0a0a0b;--bg2:#111114;--bg3:#18181c;--bg4:#1e1e24;
+    --amber:#f59e0b;--amber2:#fbbf24;--teal:#14b8a6;--teal2:#2dd4bf;
+    --coral:#f97316;--red:#ef4444;--green:#22c55e;--blue:#3b82f6;
+    --text:#e8e6df;--text2:#9d9b93;--text3:#6b6965;
+    --border:#2a2a32;--border2:#3a3a44;
+  }
+  body{background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;line-height:1.6;min-height:100vh}
+  code,pre,.mono{font-family:'JetBrains Mono',monospace}
+
+  /* NAV */
+  .nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:0;position:sticky;top:0;z-index:100;overflow-x:auto}
+  .nav-inner{display:flex;gap:0;min-width:max-content}
+  .nav-btn{background:none;border:none;color:var(--text2);padding:14px 20px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
+  .nav-btn:hover{color:var(--text);background:var(--bg3)}
+  .nav-btn.active{color:var(--amber);border-bottom-color:var(--amber)}
+
+  /* HEADER */
+  .header{background:var(--bg2);border-bottom:1px solid var(--border);padding:32px 28px 24px;position:relative}
+  .header-logo{position:absolute;top:20px;right:24px;width:64px;height:64px;border-radius:50%;object-fit:cover;object-position:center;overflow:hidden;box-shadow:0 0 18px rgba(168,85,247,.5),0 0 40px rgba(168,85,247,.2)}
+  .badge{display:inline-block;background:var(--amber);color:#000;font-size:10px;font-weight:800;letter-spacing:.12em;padding:3px 10px;text-transform:uppercase;margin-bottom:12px}
+  .header h1{font-size:28px;font-weight:800;line-height:1.2;margin-bottom:6px;font-family:'Outfit',sans-serif}
+  .header h1 span{color:var(--amber)}
+  .header p{color:var(--text2);font-size:13px;max-width:600px}
+  .stats-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+  .stat-box{background:var(--bg3);border:1px solid var(--border);padding:12px 18px;min-width:110px}
+  .stat-box .val{font-size:22px;font-weight:800;color:var(--amber)}
+  .stat-box .lbl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+
+  /* SECTIONS */
+  .section{display:none;padding:24px 28px}
+  .section.active{display:block}
+  h2{font-size:16px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);font-family:'Outfit',sans-serif}
+  h3{font-size:14px;font-weight:700;color:var(--text);margin-bottom:10px;font-family:'Outfit',sans-serif}
+
+  /* WEEK CARDS */
+  .week-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-bottom:24px}
+  .week-card{background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--amber)}
+  .week-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+  .week-num{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--amber);text-transform:uppercase}
+  .week-dates{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace}
+  .week-title{padding:14px 16px 8px;font-size:15px;font-weight:800;color:var(--text)}
+  .week-body{padding:0 16px 14px}
+  .topic-list{list-style:none}
+  .topic-list li{font-size:12px;color:var(--text2);padding:3px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+  .topic-list li:last-child{border:none}
+  .topic-list li::before{content:'';width:6px;height:6px;background:var(--teal);flex-shrink:0}
+  .topic-list li.done::before{background:var(--green);content:'✓';color:var(--green);font-size:10px;width:6px}
+  .project-tag{background:var(--amber);color:#000;font-size:10px;font-weight:800;padding:2px 8px;margin-top:10px;display:inline-block;letter-spacing:.06em}
+
+  /* SCHEDULE */
+  .schedule-grid{display:grid;grid-template-columns:80px 1fr;gap:0;max-width:680px;border:1px solid var(--border)}
+  .sch-time{background:var(--bg3);border-bottom:1px solid var(--border);padding:8px 12px;font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;display:flex;align-items:center}
+  .sch-block{border-bottom:1px solid var(--border);padding:8px 14px;font-size:12px;display:flex;align-items:center;gap:10px}
+  .sch-block.work{background:rgba(245,158,11,.08);border-left:3px solid var(--amber)}
+  .sch-block.uni{background:rgba(239,68,68,.06);border-left:3px solid var(--red)}
+  .sch-block.break{background:rgba(107,114,128,.04);border-left:3px solid var(--border2)}
+  .sch-block.project{background:rgba(20,184,166,.08);border-left:3px solid var(--teal)}
+  .sch-block.review{background:rgba(59,130,246,.06);border-left:3px solid var(--blue)}
+  .sch-block b{font-weight:700}
+  .sch-hours{font-size:11px;color:var(--text3);margin-left:auto;font-family:'JetBrains Mono',monospace}
+  .schedule-top{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(320px,.7fr);gap:20px;margin-bottom:24px}
+  .schedule-stack{display:grid;gap:16px}
+  .media-card,.summary-card,.schedule-note{background:var(--bg3);border:1px solid var(--border)}
+  .media-card{padding:18px}
+  .timer-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px}
+  .timer-mode{font-size:13px;color:var(--teal2);font-weight:700;margin-bottom:6px}
+  .timer-display{font-family:'JetBrains Mono',monospace;font-size:42px;font-weight:700;line-height:1;color:var(--text);margin-bottom:12px}
+  .timer-sub{font-size:12px;color:var(--text2);margin-bottom:16px}
+  .timer-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .timer-chip{padding:10px 12px;background:var(--bg4);border:1px solid var(--border);font-size:11px}
+  .timer-chip .k{display:block;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+  .timer-chip .v{font-family:'JetBrains Mono',monospace;color:var(--amber);font-size:15px;font-weight:700}
+  .timer-actions{display:flex;gap:8px;flex-wrap:wrap}
+  .media-frame{position:relative;border:1px solid var(--border);background:var(--bg4);min-height:280px;overflow:hidden;margin-bottom:14px}
+  .media-frame img{width:100%;height:280px;object-fit:cover;display:block;filter:saturate(1.05)}
+  .media-overlay{position:absolute;left:0;right:0;bottom:0;padding:18px;background:linear-gradient(180deg,rgba(10,10,11,0.02),rgba(10,10,11,0.88))}
+  .media-quote-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:8px;font-family:'JetBrains Mono',monospace}
+  .media-quote{font-size:18px;font-weight:700;line-height:1.45;color:#fff;max-width:90%}
+  .media-sub{font-size:12px;color:var(--text2);margin-bottom:14px}
+  .embed-form{display:grid;grid-template-columns:1fr auto;gap:10px;margin-bottom:12px}
+  .embed-input{width:100%;background:var(--bg4);border:1px solid var(--border2);color:var(--text);padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none}
+  .embed-input:focus{border-color:var(--amber)}
+  .embed-help{font-size:11px;color:var(--text3);margin-bottom:10px}
+  .media-embed{width:100%;height:220px;border:1px solid var(--border);background:var(--bg4)}
+  .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:24px}
+  .summary-card{padding:16px}
+  .summary-topline{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px}
+  .summary-eyebrow{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3)}
+  .summary-status{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--teal2)}
+  .summary-card h3{margin-bottom:6px}
+  .summary-card p{font-size:12px;color:var(--text2);margin-bottom:12px}
+  .summary-note{width:100%;min-height:100px;background:var(--bg4);border:1px solid var(--border2);color:var(--text);padding:12px;font-family:'JetBrains Mono',monospace;font-size:12px;resize:vertical;outline:none}
+  .summary-note:focus{border-color:var(--amber)}
+  .summary-meta{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:12px;font-size:11px;color:var(--text3)}
+  .summary-points{font-family:'JetBrains Mono',monospace;color:var(--amber);font-weight:700}
+  .summary-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .micro-stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:16px}
+  .micro-stat{background:var(--bg4);border:1px solid var(--border);padding:10px 12px}
+  .micro-stat .label{display:block;font-size:10px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+  .micro-stat .value{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--text)}
+  .calendar-form{display:grid;grid-template-columns:1fr 110px;gap:10px;margin-bottom:12px}
+  .calendar-form input,.calendar-form textarea{width:100%;background:var(--bg4);border:1px solid var(--border2);color:var(--text);padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none}
+  .calendar-form textarea{grid-column:1 / -1;min-height:72px;resize:vertical}
+  .calendar-form input:focus,.calendar-form textarea:focus{border-color:var(--amber)}
+  .calendar-list{display:flex;flex-direction:column;gap:10px}
+  .calendar-item{padding:12px;background:var(--bg4);border:1px solid var(--border);display:grid;grid-template-columns:110px 1fr auto;gap:12px;align-items:start}
+  .calendar-item-time{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--amber)}
+  .calendar-item-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+  .calendar-item-note{font-size:12px;color:var(--text2);line-height:1.5}
+  .calendar-empty{font-size:12px;color:var(--text3)}
+  .project-name-input{width:100%;background:var(--bg4);border:1px solid var(--border2);color:var(--text);padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;margin-bottom:12px}
+  .project-name-input:focus{border-color:var(--amber)}
+  @media(max-width:980px){.schedule-top{grid-template-columns:1fr}}
+  @media(max-width:700px){.calendar-item{grid-template-columns:1fr}.calendar-form{grid-template-columns:1fr}.embed-form{grid-template-columns:1fr}}
+
+  /* PROJECTS */
+  .proj-card{background:var(--bg3);border:1px solid var(--border);margin-bottom:20px}
+  .proj-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+  .proj-num{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-bottom:4px}
+  .proj-title{font-size:18px;font-weight:800;color:var(--text)}
+  .proj-subtitle{font-size:12px;color:var(--teal);margin-top:3px}
+  .proj-deadline{background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;white-space:nowrap;height:fit-content}
+  .proj-body{padding:16px 20px}
+  .proj-body p{font-size:13px;color:var(--text2);margin-bottom:14px}
+  .tech-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .tech-tag{background:var(--bg4);border:1px solid var(--border2);font-size:11px;color:var(--teal2);padding:3px 10px;font-family:'JetBrains Mono',monospace}
+  .deliverable-list{list-style:none}
+  .deliverable-list li{font-size:12px;color:var(--text2);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start}
+  .deliverable-list li::before{content:'→';color:var(--amber);flex-shrink:0;margin-top:1px}
+  .present-box{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.25);padding:12px 16px;margin-top:14px}
+  .present-box .label{font-size:10px;font-weight:800;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+  .present-box p{font-size:12px;color:var(--text2);margin:0}
+
+  /* CHECKLIST */
+  .checklist-day{background:var(--bg3);border:1px solid var(--border);margin-bottom:12px}
+  .checklist-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+  .checklist-header:hover{background:var(--bg4)}
+  .checklist-title{font-size:13px;font-weight:700}
+  .checklist-score{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--amber)}
+  .checklist-body{padding:12px 16px;display:none}
+  .checklist-body.open{display:block}
+  .check-item{display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid var(--border);cursor:pointer}
+  .check-item:last-child{border:none}
+  .check-box{width:16px;height:16px;border:1.5px solid var(--border2);background:none;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+  .check-item.checked .check-box{background:var(--green);border-color:var(--green);color:#000;font-size:10px}
+  .check-item.checked .check-text{text-decoration:line-through;color:var(--text3)}
+  .check-text{font-size:12px;color:var(--text2)}
+  .check-points{font-size:11px;color:var(--amber);margin-left:auto;font-family:'JetBrains Mono',monospace}
+
+  /* REWARD/PUNISHMENT */
+  .rp-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+  .rp-card{padding:16px 20px}
+  .reward-card{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2)}
+  .punish-card{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2)}
+  .rp-title{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+  .reward-card .rp-title{color:var(--green)}
+  .punish-card .rp-title{color:var(--red)}
+  .rp-item{font-size:12px;color:var(--text2);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:8px}
+  .rp-item:last-child{border:none}
+  .rp-item .icon{flex-shrink:0}
+
+  /* POINTS TRACKER */
+  .points-display{background:var(--bg3);border:1px solid var(--border);padding:20px;text-align:center;margin-bottom:20px}
+  .points-num{font-size:48px;font-weight:800;color:var(--amber);font-family:'JetBrains Mono',monospace}
+  .points-label{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-top:4px}
+  .progress-bar{background:var(--bg4);height:6px;margin:16px 0 4px}
+  .progress-fill{background:var(--amber);height:100%;transition:width .3s}
+  .progress-text{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace}
+  .btn{background:none;border:1px solid var(--border2);color:var(--text2);padding:8px 16px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;letter-spacing:.06em;transition:all .15s;text-transform:uppercase}
+  .btn:hover{border-color:var(--amber);color:var(--amber)}
+  .btn.primary{background:var(--amber);border-color:var(--amber);color:#000}
+  .btn.primary:hover{background:var(--amber2)}
+  .btn.danger{border-color:var(--red);color:var(--red)}
+  .btns-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+  /* AI PROMPTS */
+  .prompt-card{background:var(--bg3);border:1px solid var(--border);margin-bottom:16px}
+  .prompt-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:center}
+  .prompt-type{background:var(--teal);color:#000;font-size:10px;font-weight:800;padding:2px 8px;letter-spacing:.06em;text-transform:uppercase}
+  .prompt-title{font-size:13px;font-weight:700}
+  .prompt-body{padding:14px 16px}
+  .prompt-body p{font-size:12px;color:var(--text2);margin-bottom:10px}
+  .code-block{background:var(--bg);border:1px solid var(--border);padding:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal2);line-height:1.7;white-space:pre-wrap;word-break:break-word}
+  .copy-btn{background:none;border:1px solid var(--border2);color:var(--text3);font-size:10px;padding:4px 10px;cursor:pointer;font-family:'JetBrains Mono',monospace;margin-top:8px;transition:all .15s}
+  .copy-btn:hover{border-color:var(--teal);color:var(--teal)}
+
+  /* CURRICULUM TABLE */
+  .curr-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:20px}
+  .curr-table th{background:var(--bg3);color:var(--text3);font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border2)}
+  .curr-table td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+  .curr-table tr:hover td{background:var(--bg3)}
+  .curr-table .day-num{font-family:'JetBrains Mono',monospace;color:var(--text3)}
+  .curr-table .topic-name{color:var(--text);font-weight:700}
+  .curr-table .hours{font-family:'JetBrains Mono',monospace;color:var(--amber);text-align:right}
+  .curr-table .week-row td{background:var(--bg2);color:var(--amber);font-weight:800;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:10px 12px;border-top:2px solid var(--amber)}
+
+  /* TAGS */
+  .tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;letter-spacing:.06em;text-transform:uppercase}
+  .tag.cv{background:rgba(20,184,166,.15);color:var(--teal2);border:1px solid rgba(20,184,166,.3)}
+  .tag.ml{background:rgba(245,158,11,.15);color:var(--amber2);border:1px solid rgba(245,158,11,.3)}
+  .tag.ops{background:rgba(59,130,246,.15);color:#93c5fd;border:1px solid rgba(59,130,246,.3)}
+  .tag.gen{background:rgba(168,85,247,.15);color:#d8b4fe;border:1px solid rgba(168,85,247,.3)}
+  .tag.prod{background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.3)}
+
+  /* MODAL */
+  .modal-overlay{position:fixed;inset:0;background:rgba(10,10,11,.84);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:24px;z-index:1000}
+  .modal-content{width:min(100%,760px);background:linear-gradient(180deg,rgba(24,24,28,.98),rgba(17,17,20,.98));border:1px solid var(--border2);box-shadow:0 24px 80px rgba(0,0,0,.45);position:relative;overflow:hidden}
+  .modal-content::before{content:'';position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--amber),var(--teal),var(--blue))}
+  .modal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:24px 24px 18px;border-bottom:1px solid var(--border)}
+  .modal-header h3{font-size:22px;font-weight:800;letter-spacing:.03em;margin:0}
+  .modal-subtitle{font-size:12px;color:var(--text2);max-width:520px;margin-top:8px;line-height:1.7}
+  .close-btn{width:40px;height:40px;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-size:24px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s}
+  .close-btn:hover{color:var(--amber);border-color:var(--amber);background:var(--bg4)}
+  .modal-form{padding:22px 24px 24px}
+  .modal-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+  .meta-card{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.18);padding:12px 14px}
+  .meta-card.teal{background:rgba(20,184,166,.08);border-color:rgba(20,184,166,.2)}
+  .meta-card.blue{background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.2)}
+  .meta-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px}
+  .meta-value{font-size:13px;color:var(--text);font-weight:700}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .form-group{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+  .form-group.full{grid-column:1 / -1}
+  .form-group label{font-size:11px;font-weight:800;color:var(--text2);letter-spacing:.08em;text-transform:uppercase}
+  .form-group input,.form-group select,.form-group textarea{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:14px 14px;font-family:'JetBrains Mono',monospace;font-size:13px;transition:border-color .15s,box-shadow .15s,background .15s;outline:none}
+  .form-group input::placeholder,.form-group textarea::placeholder{color:var(--text3)}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(245,158,11,.12);background:var(--bg4)}
+  .form-group textarea{resize:vertical;min-height:120px;line-height:1.6}
+  .manual-focus-input{display:none;margin-top:8px}
+  .manual-focus-input.show{display:block}
+  .input-hint{font-size:11px;color:var(--text3)}
+  .focus-panel{background:var(--bg3);border:1px solid var(--border);padding:16px;margin-bottom:18px}
+  .focus-panel-title{font-size:11px;font-weight:800;color:var(--teal2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+  .focus-panel p{font-size:12px;color:var(--text2)}
+  .modal-actions{display:flex;justify-content:flex-end;gap:10px;border-top:1px solid var(--border);padding-top:18px;margin-top:4px;flex-wrap:wrap}
+  .submit-btn{background:var(--amber);border:1px solid var(--amber);color:#000;padding:12px 18px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;transition:all .15s}
+  .submit-btn:hover{background:var(--amber2);border-color:var(--amber2)}
+  .submit-btn:disabled{opacity:.65;cursor:not-allowed}
+
+  /* MISC */
+  .tip-box{background:rgba(245,158,11,.06);border-left:3px solid var(--amber);padding:12px 16px;margin:16px 0}
+  .tip-box p{font-size:12px;color:var(--text2)}
+  .tip-box strong{color:var(--amber)}
+  .divider{border:none;border-top:1px solid var(--border);margin:20px 0}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:760px){.modal-meta,.form-grid{grid-template-columns:1fr}.modal-header,.modal-form{padding-left:18px;padding-right:18px}}
+  @media(max-width:600px){.rp-grid,.two-col{grid-template-columns:1fr}.week-grid{grid-template-columns:1fr}}
+
+  /* TOAST */
+  .toast{position:fixed;bottom:28px;right:28px;padding:12px 20px;font-size:13px;font-weight:700;font-family:'Outfit',sans-serif;z-index:9999;opacity:0;transform:translateY(12px);transition:all .25s;pointer-events:none;max-width:320px}
+  .toast.show{opacity:1;transform:translateY(0)}
+  .toast-success{background:var(--green);color:#000}
+  .toast-error{background:var(--red);color:#fff}
+  .toast-info{background:var(--amber);color:#000}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <img src="logo.png" alt="logo" class="header-logo">
+  <div style="position:absolute;top:16px;right:96px;display:flex;align-items:center;gap:10px">
+    <span style="font-size:12px;color:var(--text2);font-family:'JetBrains Mono',monospace">👤 <span id="headerUsername" style="color:var(--amber)">...</span></span>
+    <button onclick="Auth.signOut()" style="background:none;border:1px solid var(--border2);color:var(--text3);font-size:11px;padding:5px 12px;cursor:pointer;font-family:'JetBrains Mono',monospace;letter-spacing:.05em;transition:all .15s" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text3)'">LOGOUT</button>
+  </div>
+  <div class="badge">PORTFOLIO SPRINT BLUEPRINT</div>
+  <h1>AI/ML Engineer <span>8-Week</span> Tactical Plan</h1>
+  <p>Not just a roadmap — this is a discipline system, growth engine, and job-landing machine. Every day counts.</p>
+  <div class="stats-row">
+    <div class="stat-box"><div class="val">56</div><div class="lbl">WORK DAYS</div></div>
+    <div class="stat-box"><div class="val" id="statHours">0</div><div class="lbl">HOURS LOGGED</div></div>
+    <div class="stat-box"><div class="val">4</div><div class="lbl">PORTFOLIO PROJECTS</div></div>
+    <div class="stat-box"><div class="val" id="statStreak" style="color:var(--teal)">0</div><div class="lbl">DAY STREAK</div></div>
+    <div class="stat-box"><div class="val" id="statPoints">0</div><div class="lbl">TOTAL POINTS</div></div>
+    <div class="stat-box"><div class="val" id="statWeeklyReports" style="color:var(--blue)">0</div><div class="lbl">WEEKLY REVIEWS</div></div>
+    <div class="stat-box"><div class="val" id="statProjectSummaries" style="color:var(--green)">0</div><div class="lbl">PROJECT SUMMARIES</div></div>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showSection('schedule',this)">DAILY SCHEDULE</button>
+    <button class="nav-btn" onclick="showSection('curriculum',this)">56-DAY PLAN</button>
+    <button class="nav-btn" onclick="showSection('projects',this)">PROJECTS</button>
+    <button class="nav-btn" onclick="showSection('checklist',this)">DAILY CHECKLIST</button>
+    <button class="nav-btn" onclick="showSection('rewards',this)">REWARDS / PUNISHMENTS</button>
+    <button class="nav-btn" onclick="showSection('prompts',this)">AI LEARNING PROMPTS</button>
+    <button class="nav-btn" onclick="showSection('cv',this)">COMPUTER VISION</button>
+    <a href="dashboard.html" class="nav-btn" style="color:var(--teal)">AI TRACKER →</a>
+  </div>
+</div>
+
+<!-- ===== SCHEDULE ===== -->
+<div id="schedule" class="section active">
+  <h2>Daily Time Schedule</h2>
+  
+  <div class="schedule-top">
+    <div class="schedule-stack">
+      <div>
+        <h3 style="margin-bottom:14px">Weekdays (Monday - Friday)</h3>
+        <div class="schedule-grid">
+          <div class="sch-time">04:50</div><div class="sch-block break"><b>Wake up + water + prayer</b> - start calm, no phone<span class="sch-hours">0.5h</span></div>
+          <div class="sch-time">05:20</div><div class="sch-block work"><b>Deep Work #1</b> - theory, notes, first hard topic<span class="sch-hours">2.3h</span></div>
+          <div class="sch-time">07:40</div><div class="sch-block break"><b>Breakfast + prep</b> - reset and move with intention<span class="sch-hours">1.1h</span></div>
+          <div class="sch-time">09:00</div><div class="sch-block uni"><b>University</b> - fixed commitment block<span class="sch-hours">2.5h</span></div>
+          <div class="sch-time">11:30</div><div class="sch-block review"><b>Light review / admin</b> - recap, flashcards, Git notes<span class="sch-hours">1h</span></div>
+          <div class="sch-time">12:30</div><div class="sch-block break"><b>Lunch + prayer + reset</b><span class="sch-hours">1.3h</span></div>
+          <div class="sch-time">13:50</div><div class="sch-block work"><b>Deep Work #2</b> - coding, practice, debugging<span class="sch-hours">2.5h</span></div>
+          <div class="sch-time">16:20</div><div class="sch-block break"><b>Break</b> - walk, water, eyes off screen<span class="sch-hours">0.3h</span></div>
+          <div class="sch-time">16:40</div><div class="sch-block project"><b>Project Build Block</b> - ship one visible artifact<span class="sch-hours">2.3h</span></div>
+          <div class="sch-time">19:00</div><div class="sch-block break"><b>Dinner + short rest</b><span class="sch-hours">0.7h</span></div>
+          <div class="sch-time">19:40</div><div class="sch-block review"><b>Review + interview prep</b> - summary, recap, explanation drill<span class="sch-hours">1.5h</span></div>
+          <div class="sch-time">21:10</div><div class="sch-block review"><b>Tomorrow plan + shutdown</b> - set next targets, close loops<span class="sch-hours">0.5h</span></div>
+          <div class="sch-time">22:00</div><div class="sch-block break"><b>Sleep</b> - protect recovery<span class="sch-hours">-</span></div>
+        </div>
+        <div style="margin-top:10px;font-size:12px;color:var(--text3)">Total effective time: <span style="color:var(--amber);font-weight:700">~9.6 h/day</span></div>
+      </div>
+
+      <div>
+        <h3 style="margin-bottom:14px">Weekends (Saturday - Sunday)</h3>
+        <div class="schedule-grid">
+          <div class="sch-time">05:20</div><div class="sch-block work"><b>Deep Work Marathon</b> - hardest topic first<span class="sch-hours">3.5h</span></div>
+          <div class="sch-time">08:50</div><div class="sch-block break"><b>Breakfast + reset</b><span class="sch-hours">0.8h</span></div>
+          <div class="sch-time">09:40</div><div class="sch-block project"><b>Project Sprint #1</b> - build and test<span class="sch-hours">2.8h</span></div>
+          <div class="sch-time">12:30</div><div class="sch-block break"><b>Lunch + prayer + reset</b><span class="sch-hours">1.3h</span></div>
+          <div class="sch-time">13:50</div><div class="sch-block project"><b>Project Sprint #2</b> - polish and document<span class="sch-hours">3h</span></div>
+          <div class="sch-time">16:50</div><div class="sch-block break"><b>Exercise + recovery</b><span class="sch-hours">0.8h</span></div>
+          <div class="sch-time">17:40</div><div class="sch-block review"><b>Weekly review / presentation prep</b><span class="sch-hours">2h</span></div>
+          <div class="sch-time">19:40</div><div class="sch-block review"><b>Reflection + planning</b><span class="sch-hours">1.2h</span></div>
+          <div class="sch-time">22:00</div><div class="sch-block break"><b>Sleep</b><span class="sch-hours">-</span></div>
+        </div>
+        <div style="margin-top:10px;font-size:12px;color:var(--text3)">Total effective time: <span style="color:var(--amber);font-weight:700">~10.5 h/day</span></div>
+      </div>
+    </div>
+
+    <div class="schedule-stack">
+      <div class="media-card">
+        <div class="timer-label">Inspiration Wall</div>
+        <div class="media-frame">
+          <img id="motivationImage" alt="Motivational visual">
+          <div class="media-overlay">
+            <div class="media-quote-label">Focus Quote</div>
+            <div class="media-quote" id="motivationQuote">Discipline creates options that motivation alone never can.</div>
+          </div>
+        </div>
+        <div class="media-sub" id="motivationRefreshInfo">Visuals rotate automatically, and you can refresh them anytime.</div>
+        <div class="timer-actions" style="margin-bottom:14px">
+          <button class="btn primary" type="button" onclick="refreshMotivationWall()">Refresh Visual</button>
+          <button class="btn" type="button" onclick="nextMotivationQuote()">Next Quote</button>
+        </div>
+        <div class="timer-label">Custom Video Embed</div>
+        <div class="embed-form">
+          <input class="embed-input" id="motivationEmbedUrl" type="text" placeholder="Paste YouTube / Vimeo link or embed URL">
+          <button class="btn primary" type="button" onclick="applyMotivationEmbed()">Apply</button>
+        </div>
+        <div class="embed-help" id="motivationEmbedHelp">Tip: regular YouTube links are converted automatically if the site allows embedding.</div>
+        <iframe class="media-embed" id="motivationVideoFrame" src="about:blank" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+      </div>
+
+      <div class="schedule-note" style="padding:16px">
+        <div class="timer-label">Live Calendar</div>
+        <div class="calendar-form">
+          <input type="datetime-local" id="calendarDateTime">
+          <button class="btn primary" type="button" onclick="addCalendarItem()">Add</button>
+          <input type="text" id="calendarTitle" placeholder="Calendar title">
+          <textarea id="calendarNote" placeholder="Short note, meeting plan, task goal, or reminder"></textarea>
+        </div>
+        <div class="calendar-list" id="calendarList">
+          <div class="calendar-empty">No calendar items yet. Add your next study block, class, or deadline here.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-bottom:28px;display:none">
+    <div>
+      <h3 style="margin-bottom:14px">Weekdays (Monday — Friday)</h3>
+      <div class="schedule-grid">
+        <div class="sch-time">05:30</div><div class="sch-block work"><b>Deep Work #1</b> — New concept + theory<span class="sch-hours">3.5h</span></div>
+        <div class="sch-time">09:00</div><div class="sch-block uni"><b>University</b> ❌ Unavailable<span class="sch-hours">2.5h</span></div>
+        <div class="sch-time">11:30</div><div class="sch-block break"><b>Lunch prep</b> ❌ Busy<span class="sch-hours">1h</span></div>
+        <div class="sch-time">12:30</div><div class="sch-block work"><b>Deep Work #2</b> — Coding + practice<span class="sch-hours">3h</span></div>
+        <div class="sch-time">15:30</div><div class="sch-block break"><b>Break</b> — 15 min<span class="sch-hours">0.25h</span></div>
+        <div class="sch-time">15:45</div><div class="sch-block project"><b>Project Work</b> — Build mode<span class="sch-hours">3h</span></div>
+        <div class="sch-time">18:45</div><div class="sch-block break"><b>Break</b> — 30 min<span class="sch-hours">0.5h</span></div>
+        <div class="sch-time">21:00</div><div class="sch-block break"><b>Evening review + report</b><span class="sch-hours">0.5h</span></div>
+        <div class="sch-time">21:30</div><div class="sch-block break"><b>Sleep</b><span class="sch-hours">?</span></div>
+        <div class="sch-time">21:00</div><div class="sch-block break"><b>Rest</b><span class="sch-hours">—</span></div>
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:var(--text3)">Total effective time: <span style="color:var(--amber);font-weight:700">~10.75 h/day</span></div>
+    </div>
+    
+    <div>
+      <h3 style="margin-bottom:14px">Weekends (Saturday — Sunday)</h3>
+      <div class="schedule-grid">
+        <div class="sch-time">07:00</div><div class="sch-block work"><b>Deep Work Marathon</b> — Theory + code<span class="sch-hours">5h</span></div>
+        <div class="sch-time">12:00</div><div class="sch-block break"><b>Lunch + rest</b><span class="sch-hours">1h</span></div>
+        <div class="sch-time">13:00</div><div class="sch-block project"><b>Project Sprint</b> — Feature build<span class="sch-hours">4h</span></div>
+        <div class="sch-time">17:00</div><div class="sch-block break"><b>Exercise + rest</b><span class="sch-hours">1h</span></div>
+        <div class="sch-time">18:00</div><div class="sch-block review"><b>Week review + presentation prep</b><span class="sch-hours">2h</span></div>
+        <div class="sch-time">20:00</div><div class="sch-block review"><b>Presentation rehearsal (optional)</b><span class="sch-hours">1h</span></div>
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:var(--text3)">Total effective time: <span style="color:var(--amber);font-weight:700">~12 h/day</span></div>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <p><strong>Golden Rule:</strong> During Deep Work blocks — phone in another room. Set <strong>one single goal</strong> per block, ship one visible output, and keep context switching at zero.</p>
+  </div>
+
+  <h2 style="margin-top:24px">Weekly Overview</h2>
+  <div class="week-grid">
+    <div class="week-card">
+      <div class="week-header"><span class="week-num">WEEK 1</span><span class="week-dates">Day 1–7</span></div>
+      <div class="week-title">PyTorch + CNN + CV Foundations</div>
+      <div class="week-body"><ul class="topic-list"><li>PyTorch deep dive (autograd, tensors)</li><li>CNN arxitekturasi (ResNet, EfficientNet)</li><li>Transfer Learning amaliyoti</li><li>OpenCV + image preprocessing</li></ul><span class="project-tag">▶ Project 1 start</span></div>
+    </div>
+    <div class="week-card" style="border-left-color:var(--coral)">
+      <div class="week-header"><span class="week-num" style="color:var(--coral)">WEEK 2</span><span class="week-dates">Day 8–14</span></div>
+      <div class="week-title">Object Detection + Anomaly + PROJECT 1</div>
+      <div class="week-body"><ul class="topic-list"><li>YOLO (v8) — real-time detection</li><li>Segmentation (SAM basics)</li><li>Anomaly Detection + Classical ML</li><li>FastAPI + CV model serving</li></ul><span class="project-tag" style="background:var(--coral)">🎯 Project 1 DEADLINE</span></div>
+    </div>
+    <div class="week-card" style="border-left-color:var(--teal)">
+      <div class="week-header"><span class="week-num" style="color:var(--teal)">WEEK 3</span><span class="week-dates">Day 15–21</span></div>
+      <div class="week-title">Embeddings + Vector DBs + LLMs</div>
+      <div class="week-body"><ul class="topic-list"><li>Word2Vec → BERT → CLIP</li><li>Vector DB (Chroma, Qdrant)</li><li>LLM arxitekturasi (GPT, LLaMA)</li><li>Prompt Engineering pro usullari</li></ul><span class="project-tag" style="background:var(--teal);color:#000">▶ Project 2 start</span></div>
+    </div>
+    <div class="week-card" style="border-left-color:var(--blue)">
+      <div class="week-header"><span class="week-num" style="color:var(--blue)">WEEK 4</span><span class="week-dates">Day 22–28</span></div>
+      <div class="week-title">RAG + Fine-tuning + Cost Math</div>
+      <div class="week-body"><ul class="topic-list"><li>RAG pipeline (chunking, reranking)</li><li>LoRA fine-tuning</li><li>Multimodal RAG (images + text)</li><li>Token cost calculation</li></ul><span class="project-tag" style="background:var(--blue)">🎯 Project 2 DEADLINE</span></div>
+    </div>
+    <div class="week-card" style="border-left-color:var(--green)">
+      <div class="week-header"><span class="week-num" style="color:var(--green)">WEEK 5</span><span class="week-dates">Day 29–35</span></div>
+      <div class="week-title">MLOps Stack — Experiment + Tracking</div>
+      <div class="week-body"><ul class="topic-list"><li>Docker + Docker Compose</li><li>MLflow + Weights & Biases</li><li>DVC — data versioning</li><li>Model registry + versioning</li></ul><span class="project-tag" style="background:var(--green);color:#000">▶ Project 3 start</span></div>
+    </div>
+    <div class="week-card" style="border-left-color:#a855f7">
+      <div class="week-header"><span class="week-num" style="color:#a855f7">WEEK 6</span><span class="week-dates">Day 36–42</span></div>
+      <div class="week-title">System Design + Monitoring + PROJECT 3</div>
+      <div class="week-body"><ul class="topic-list"><li>System design (caching, routing, LB)</li><li>Prometheus + Grafana monitoring</li><li>Model drift detection</li><li>CI/CD for ML (GitHub Actions)</li></ul><span class="project-tag" style="background:#a855f7">🎯 Project 3 DEADLINE</span></div>
+    </div>
+    <div class="week-card" style="border-left-color:#ec4899">
+      <div class="week-header"><span class="week-num" style="color:#ec4899">WEEK 7</span><span class="week-dates">Day 43–49</span></div>
+      <div class="week-title">AI Agent + Advanced Production</div>
+      <div class="week-body"><ul class="topic-list"><li>Model quantization (INT8/INT4)</li><li>A/B testing frameworks</li><li>Cost optimization strategies</li><li>Security for ML systems</li></ul><span class="project-tag" style="background:#ec4899">▶ Project 4 start</span></div>
+    </div>
+    <div class="week-card" style="border-left-color:var(--amber)">
+      <div class="week-header"><span class="week-num">WEEK 8</span><span class="week-dates">Day 50–56</span></div>
+      <div class="week-title">Portfolio + Interview + Applications</div>
+      <div class="week-body"><ul class="topic-list"><li>GitHub portfolio optimization</li><li>Technical interview prep</li><li>LinkedIn + resume AI/ML focused</li><li>Mock interviews + presentation</li></ul><span class="project-tag">🏁 Project 4 DEADLINE + DEMO DAY</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CURRICULUM ===== -->
+<div id="curriculum" class="section">
+  <h2>Detailed 56-Day Curriculum</h2>
+  
+  <div class="tip-box">
+    <p><strong>Rule:</strong> Each day has <strong>one core topic + hands-on task</strong>. Use AI to learn (for understanding, not copy-paste). Daily goal: <strong>understand the concept well enough to explain it to others.</strong></p>
+  </div>
+
+  <table class="curr-table">
+    <thead><tr><th>Day</th><th>Topic</th><th>Tag</th><th>Hands-on Task</th><th>Hrs</th></tr></thead>
+    <tbody>
+      <tr class="week-row"><td colspan="5">── WEEK 1: PyTorch + Computer Vision Foundations ──</td></tr>
+      <tr><td class="day-num">1</td><td class="topic-name">PyTorch: Tensors va Autograd</td><td><span class="tag cv">DL</span></td><td>Draw 5 tensor operations on paper. Implement autograd for y=x²+3x. Verify by hand.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">2</td><td class="topic-name">nn.Module + Training Loop</td><td><span class="tag cv">DL</span></td><td>Build MNIST MLP from scratch. Write every line of train loop manually. Target >95%.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">3</td><td class="topic-name">CNN: Conv, Pooling, Arxitektura</td><td><span class="tag cv">CV</span></td><td>Build 3-block CNN for CIFAR-10 (>70%). Visualize feature maps with matplotlib.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">4</td><td class="topic-name">Transfer Learning + Fine-tuning</td><td><span class="tag cv">CV</span></td><td>Fine-tune ResNet18 on Flowers102. Frozen vs unfrozen comparison. Grad-CAM heatmaps.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">5</td><td class="topic-name">OpenCV: Image Preprocessing Pipeline</td><td><span class="tag cv">CV</span></td><td>Build preprocessing pipeline: resize, normalize, augment (albumentations). Webcam stream.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">6</td><td class="topic-name">Data Augmentation + Validation Strategy</td><td><span class="tag cv">CV</span></td><td>Robust augmentation + data validation pipeline. Test with 10 different image types.</td><td class="hours">12h</td></tr>
+      <tr><td class="day-num">7</td><td class="topic-name">Project 1 kickoff + architecture design</td><td><span class="tag prod">BUILD</span></td><td>Draw AIAS system diagram (ESP32-CAM → YOLOv8 → ByteTrack → OSNet → CSV). Set up repo + README.</td><td class="hours">12h</td></tr>
+
+      <tr class="week-row"><td colspan="5">── WEEK 2: Object Detection + PROJECT 1: AttendIQ ──</td></tr>
+      <tr><td class="day-num">8</td><td class="topic-name">YOLOv8: Architecture va Training</td><td><span class="tag cv">CV</span></td><td>Train YOLOv8 on custom dataset (Roboflow). Measure mAP. Compare model sizes (n/s/m).</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">9</td><td class="topic-name">Object Tracking (DeepSORT, ByteTrack)</td><td><span class="tag cv">CV</span></td><td>Implement multi-object tracking on video. Assign persistent IDs. Count entries/exits.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">10</td><td class="topic-name">Anomaly Detection (Isolation Forest + Autoencoder)</td><td><span class="tag ml">ML</span></td><td>Detect unusual behavior patterns using Isolation Forest + Autoencoder on image features.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">11</td><td class="topic-name">FastAPI + Model Serving Patterns</td><td><span class="tag ops">MLOps</span></td><td>Build async FastAPI for CV model serving. Health checks. Rate limiting. Error handling.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">12</td><td class="topic-name">Project 1 — Core Features Build</td><td><span class="tag prod">BUILD</span></td><td>Integrate: YOLO → face recognition → attendance log → anomaly alert → Streamlit UI.</td><td class="hours">12h</td></tr>
+      <tr><td class="day-num">13</td><td class="topic-name">Project 1 — Polish + Testing + Hujjat</td><td><span class="tag prod">BUILD</span></td><td>Dockerize. FastAPI + README with architecture diagram. Record 2-min demo video.</td><td class="hours">12h</td></tr>
+      <tr><td class="day-num">14</td><td class="topic-name">🎯 PROJECT 1 DEADLINE + TAQDIMOT</td><td><span class="tag prod">DEMO</span></td><td>10-minute technical walkthrough. Explain architecture + tradeoffs. Answer tough questions.</td><td class="hours">—</td></tr>
+
+      <tr class="week-row"><td colspan="5">── WEEK 3: Embeddings + Vector DBs + LLMs ──</td></tr>
+      <tr><td class="day-num">15</td><td class="topic-name">Word2Vec → Sentence Transformers</td><td><span class="tag gen">GenAI</span></td><td>Train Word2Vec on corpus. Visualize embeddings with t-SNE. Test 10 word analogies.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">16</td><td class="topic-name">CLIP: Visual + Text Embeddings</td><td><span class="tag gen">GenAI</span></td><td>Build image-text similarity search with CLIP. Search images by text description.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">17</td><td class="topic-name">Vector DB: Chroma + Qdrant</td><td><span class="tag gen">GenAI</span></td><td>Compare HNSW vs IVF vs Flat search. Benchmark speed vs accuracy. Draw index diagrams.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">18</td><td class="topic-name">LLM Arxitekturasi: GPT, BERT, LLaMA</td><td><span class="tag gen">GenAI</span></td><td>Implement self-attention in NumPy. Multi-head attention in PyTorch. Visualize weights.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">19</td><td class="topic-name">Advanced Prompt Engineering</td><td><span class="tag gen">GenAI</span></td><td>Chain-of-thought, few-shot, structured output — test 10 real prompts + measure accuracy.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">20</td><td class="topic-name">Cost Mathematics for LLMs</td><td><span class="tag gen">GenAI</span></td><td>Build token cost calculator for 100K users. Monthly cost projection tool.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">21</td><td class="topic-name">Project 2 kickoff + multimodal design</td><td><span class="tag prod">BUILD</span></td><td>Design multimodal RAG: image + text → embedding → search → LLM answer pipeline.</td><td class="hours">12h</td></tr>
+
+      <tr class="week-row"><td colspan="5">── WEEK 4: RAG + Fine-tuning + PROJECT 2: VisionRAG ──</td></tr>
+      <tr><td class="day-num">22</td><td class="topic-name">RAG Pipeline: Chunking + Retrieval</td><td><span class="tag gen">GenAI</span></td><td>Compare chunk sizes (500 vs 1000). Recursive vs semantic splitting. Measure precision@k.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">23</td><td class="topic-name">Hybrid Search + Reranking</td><td><span class="tag gen">GenAI</span></td><td>Hybrid BM25 + semantic retrieval with reciprocal rank fusion + cross-encoder reranking.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">24</td><td class="topic-name">LoRA Fine-tuning</td><td><span class="tag gen">GenAI</span></td><td>Fine-tune Mistral/Llama with LoRA (4-bit). Compare base vs fine-tuned. Export GGUF.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">25</td><td class="topic-name">Multimodal RAG (CLIP + LLM)</td><td><span class="tag cv">CV+Gen</span></td><td>Build image Q&A: upload image → CLIP embed → retrieve similar → LLM generates answer.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">26</td><td class="topic-name">Project 2 — Core Features Build</td><td><span class="tag prod">BUILD</span></td><td>Full pipeline: upload → embed → store → query → stream answer. FastAPI + Streamlit.</td><td class="hours">12h</td></tr>
+      <tr><td class="day-num">27</td><td class="topic-name">Project 2 — UI + Polish + Hujjat</td><td><span class="tag prod">BUILD</span></td><td>Docker compose. RAG evaluation (ragas). Professional README. Record 2-min demo.</td><td class="hours">12h</td></tr>
+      <tr><td class="day-num">28</td><td class="topic-name">🎯 PROJECT 2 DEADLINE + TAQDIMOT</td><td><span class="tag prod">DEMO</span></td><td>15-min technical demo: architecture, retrieval quality, cost analysis. Q&A.</td><td class="hours">—</td></tr>
+
+      <tr class="week-row"><td colspan="5">── WEEK 5: MLOps — Docker + Experiment Tracking ──</td></tr>
+      <tr><td class="day-num">29</td><td class="topic-name">Docker Deep Dive</td><td><span class="tag ops">MLOps</span></td><td>Write optimized multi-stage Dockerfile for ML model. Compare image sizes.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">30</td><td class="topic-name">Docker Compose + ML Stack</td><td><span class="tag ops">MLOps</span></td><td>Compose: model API + DB + Redis + monitoring. Health checks. Volumes. Networking.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">31</td><td class="topic-name">MLflow: Experiment Tracking</td><td><span class="tag ops">MLOps</span></td><td>Track 5 model runs with different params. Compare in MLflow UI. Register best model.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">32</td><td class="topic-name">Weights & Biases + Model Registry</td><td><span class="tag ops">MLOps</span></td><td>W&B sweeps, artifacts, model versioning. Compare MLflow vs W&B. When to use which?</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">33</td><td class="topic-name">DVC — Data Version Control</td><td><span class="tag ops">MLOps</span></td><td>Version dataset with DVC. Create reproducible pipeline. Push to remote storage.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">34</td><td class="topic-name">Git Advanced + CI/CD Intro</td><td><span class="tag ops">MLOps</span></td><td>CI pipeline: pytest → lint → docker build → push to GHCR. Green badge on README.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">35</td><td class="topic-name">Project 3 kickoff + infra design</td><td><span class="tag prod">BUILD</span></td><td>Design MLPulse: model serving + experiment tracking + monitoring + drift alerts.</td><td class="hours">12h</td></tr>
+
+      <tr class="week-row"><td colspan="5">── WEEK 6: System Design + PROJECT 3: MLPulse ──</td></tr>
+      <tr><td class="day-num">36</td><td class="topic-name">System Design for ML: Caching + Routing</td><td><span class="tag prod">Design</span></td><td>Design semantic caching + hybrid model routing. Draw architecture with tradeoffs.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">37</td><td class="topic-name">Prometheus + Grafana Monitoring</td><td><span class="tag ops">MLOps</span></td><td>Set up Prometheus + Grafana. Build dashboard: p50/p95/p99 latency + custom alerts.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">38</td><td class="topic-name">Model Drift Detection</td><td><span class="tag ops">MLOps</span></td><td>Implement PSI + KL divergence drift detection. Automated retraining trigger.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">39</td><td class="topic-name">Load Balancing + Auto-scaling</td><td><span class="tag ops">MLOps</span></td><td>Production API: rate limiting, circuit breaker, graceful degradation, fallback chains.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">40</td><td class="topic-name">Project 3 — Core Features Build</td><td><span class="tag prod">BUILD</span></td><td>Integrate: model serving + MLflow + Prometheus + drift detection + structured logging.</td><td class="hours">12h</td></tr>
+      <tr><td class="day-num">41</td><td class="topic-name">Project 3 — Polish + Load Testing</td><td><span class="tag prod">BUILD</span></td><td>Locust load test. Find bottlenecks. GitHub Actions CI/CD pipeline. Full documentation.</td><td class="hours">12h</td></tr>
+      <tr><td class="day-num">42</td><td class="topic-name">🎯 PROJECT 3 DEADLINE + TAQDIMOT</td><td><span class="tag prod">DEMO</span></td><td>15-min demo: deploy live + show monitoring dashboard + demonstrate drift detection.</td><td class="hours">—</td></tr>
+
+      <tr class="week-row"><td colspan="5">── WEEK 7: AI Agent + Advanced Production ──</td></tr>
+      <tr><td class="day-num">43</td><td class="topic-name">Model Quantization (INT8, INT4, GGUF)</td><td><span class="tag prod">Prod</span></td><td>Quantize models. Compare: size, speed, accuracy loss. When is the tradeoff worth it?</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">44</td><td class="topic-name">Knowledge Distillation</td><td><span class="tag prod">Prod</span></td><td>Distill large → small model. Design A/B test with statistical significance.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">45</td><td class="topic-name">A/B Testing Frameworks</td><td><span class="tag prod">Prod</span></td><td>Build 4 custom tools: web search, code executor, PDF reader, calculator. ReAct loop.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">46</td><td class="topic-name">SHAP + Model Interpretability</td><td><span class="tag ml">ML</span></td><td>Agent memory (buffer + summary). Chain multiple tool calls. Error recovery + fallback.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">47</td><td class="topic-name">Security for ML Systems</td><td><span class="tag prod">Prod</span></td><td>SHAP interpretability + adversarial attack demo + security best practices.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">48</td><td class="topic-name">Batch Processing + Streaming (Kafka)</td><td><span class="tag prod">Prod</span></td><td>Agent core build: 4 tools + streaming FastAPI + Streamlit chat UI. Real-time tool viz.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">49</td><td class="topic-name">Project 4 kickoff — NeuralNexus Dashboard</td><td><span class="tag prod">BUILD</span></td><td>Agent: cost tracking + rate limiting + Docker + CI/CD. Professional README.</td><td class="hours">12h</td></tr>
+
+      <tr class="week-row"><td colspan="5">── WEEK 8: Portfolio + Interview + Applications ──</td></tr>
+      <tr><td class="day-num">50</td><td class="topic-name">Project 4 — Dashboard Build</td><td><span class="tag prod">BUILD</span></td><td>AI Agent live demo. Show: question → think → tool call → stream answer. Record video.</td><td class="hours">12h</td></tr>
+      <tr><td class="day-num">51</td><td class="topic-name">Project 4 — Integration + Testing</td><td><span class="tag prod">BUILD</span></td><td>4 project READMEs with architecture diagrams, demo GIFs, metrics tables. Pin repos.</td><td class="hours">12h</td></tr>
+      <tr><td class="day-num">52</td><td class="topic-name">GitHub Portfolio Optimization</td><td><span class="tag prod">Career</span></td><td>Portfolio website: yourname.github.io — 4 project cards with live URLs + tech stacks.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">53</td><td class="topic-name">Technical Interview Prep — ML Theory</td><td><span class="tag prod">Career</span></td><td>50 ML theory questions verbally: backprop, attention, LoRA, drift, RAG, CNN. 2 min each.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">54</td><td class="topic-name">Technical Interview Prep — System Design</td><td><span class="tag prod">Career</span></td><td>System design mock: "Design recommendation for 10M users." Write design doc + verbal.</td><td class="hours">10h</td></tr>
+      <tr><td class="day-num">55</td><td class="topic-name">Resume + LinkedIn AI/ML Version</td><td><span class="tag prod">Career</span></td><td>ATS resume + LinkedIn 100%. Send 12+ applications. 5 cold outreach messages.</td><td class="hours">8h</td></tr>
+      <tr><td class="day-num">56</td><td class="topic-name">🏁 DEMO DAY — Grand Finale + Celebrate</td><td><span class="tag prod">DEMO</span></td><td>Grand demo to mentors, peers, employers. 4 projects. You did it. Keep building.</td><td class="hours">—</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== PROJECTS ===== -->
+<div id="projects" class="section">
+  <h2>4 Production Portfolio Projects</h2>
+
+  <!-- PROJECT 1 -->
+  <div class="proj-card">
+    <div class="proj-header">
+      <div>
+        <div class="proj-num">Project #1 — Week 1-2</div>
+        <div class="proj-title">AIAS 🎓</div>
+        <div class="proj-subtitle">Artificial Intelligence Attendance System — Multi-Object Tracking &amp; Person Re-Identification</div>
+      </div>
+      <div class="proj-deadline">DEADLINE: Day 14</div>
+    </div>
+    <div class="proj-body">
+      <p>A production-grade smart attendance system that eliminates manual roll-calls entirely. Unlike Face-ID (which fails when students turn away or wear masks), <strong>AIAS uses body-based Re-Identification</strong> — tracking each person via their unique "digital silhouette" (body shape, clothing color, posture). An ESP32-CAM streams wirelessly to a YOLOv8 Nano detection engine; ByteTrack assigns persistent cross-frame IDs; OSNet extracts discriminative Re-ID embeddings. Zero frontal-camera requirement. Attendance logged to CSV/Excel automatically.</p>
+
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin:14px 0;display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px">
+        <div><span style="color:var(--text3);display:block;margin-bottom:3px">Visual Input</span><span style="color:var(--amber);font-weight:700">ESP32-CAM Wireless Stream</span></div>
+        <div><span style="color:var(--text3);display:block;margin-bottom:3px">Tracking Logic</span><span style="color:var(--amber);font-weight:700">ByteTrack Association Metric</span></div>
+        <div><span style="color:var(--text3);display:block;margin-bottom:3px">Re-ID Engine</span><span style="color:var(--teal);font-weight:700">OSNet Omni-Scale Features</span></div>
+        <div><span style="color:var(--text3);display:block;margin-bottom:3px">Output</span><span style="color:var(--teal);font-weight:700">Auto CSV / Excel Logging</span></div>
+      </div>
+
+      <div class="tech-tags">
+        <span class="tech-tag">YOLOv8 Nano</span><span class="tech-tag">ByteTrack</span><span class="tech-tag">OSNet</span>
+        <span class="tech-tag">ESP32-CAM</span><span class="tech-tag">OpenCV</span><span class="tech-tag">FastAPI</span>
+        <span class="tech-tag">Streamlit</span><span class="tech-tag">SQLite</span><span class="tech-tag">Docker</span>
+      </div>
+      <ul class="deliverable-list">
+        <li><strong>YOLOv8 Nano detector:</strong> real-time person detection optimized for edge — &lt;25ms inference, no GPU required</li>
+        <li><strong>ByteTrack MOT:</strong> persistent student IDs across full session — survives occlusion, crowd crossings, re-entry after leaving frame</li>
+        <li><strong>OSNet Re-ID:</strong> omni-scale feature extraction from body silhouette + clothing — no frontal face needed, robust to masks &amp; glasses</li>
+        <li><strong>ESP32-CAM integration:</strong> wireless MJPEG stream over Wi-Fi → OpenCV RTSP capture → YOLOv8 pipeline (zero-cable classroom setup)</li>
+        <li><strong>Auto attendance log:</strong> first-seen / last-seen timestamps per student ID → SQLite → daily CSV / Excel export</li>
+        <li><strong>Streamlit dashboard:</strong> live annotated feed, real-time attendance table, absence alerts, per-student entry/exit timeline</li>
+      </ul>
+      <div class="present-box">
+        <div class="label">📢 Presentation Script (10 min)</div>
+        <p>"Standard Face-ID has a fundamental flaw — it only works when a student looks directly at the camera. Put on a mask, turn your head, or sit in a crowded row and the system loses you. AttendIQ solves this with person Re-Identification: we encode each student as a 'digital silhouette' using OSNet's omni-scale feature pyramid, then ByteTrack maintains a persistent ID gallery frame-to-frame. The hardest challenge was gallery drift — when two students wear similar colored clothing. I solved it by fusing deep Re-ID embeddings with IoU-based spatial consistency. In future: cross-camera Re-ID across multiple ESP32-CAMs placed at different room angles." — Live demo: student enters, turns away, gets briefly occluded, re-appears — same ID maintained throughout.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT 2 -->
+  <div class="proj-card" style="border-left:3px solid var(--teal)">
+    <div class="proj-header">
+      <div>
+        <div class="proj-num" style="color:var(--teal)">Project #2 — Week 3-4</div>
+        <div class="proj-title">VisionRAG 👁️🧠</div>
+        <div class="proj-subtitle">Multimodal search — images AND text with AI-powered answers</div>
+      </div>
+      <div class="proj-deadline" style="background:var(--teal)">DEADLINE: Day 28</div>
+    </div>
+    <div class="proj-body">
+      <p>CLIP embeddings + Qdrant vector database + LLM (GPT-4o-mini or Llama 3) in a multimodal RAG system. Upload images OR type text — system finds similar content across both modalities and generates cited answers. Includes hybrid search + cross-encoder reranking.</p>
+      <div class="tech-tags">
+        <span class="tech-tag">CLIP</span><span class="tech-tag">Sentence Transformers</span>
+        <span class="tech-tag">Qdrant</span><span class="tech-tag">LangChain</span><span class="tech-tag">FastAPI</span>
+        <span class="tech-tag">Streamlit</span><span class="tech-tag">BM25</span><span class="tech-tag">Reranking</span>
+      </div>
+      <ul class="deliverable-list">
+        <li>Image upload → CLIP embedding → Qdrant-da saqlash (1000+ rasm corpus)</li>
+        <li>Text query yoki rasm query → hybrid search (BM25 + semantic)</li>
+        <li>Cross-modal: rasmdan matn topish, matndan rasm topish</li>
+        <li>Reranking qatlami — relevantlik sifatini oshirish</li>
+        <li>LLM integration: topilgan kontekst asosida batafsil javob</li>
+        <li>Eval dashboard: precision@k, NDCG metrikalar</li>
+      </ul>
+      <div class="present-box">
+        <div class="label">📢 Presentation Script (15 min)</div>
+        <p>"Why isn't keyword search enough? Because... How do embeddings work? Let me visualize. Why CLIP? It places images and text in the same vector space. Business use: e-commerce, medical archives, legal documents..."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT 3 -->
+  <div class="proj-card" style="border-left:3px solid #a855f7">
+    <div class="proj-header">
+      <div>
+        <div class="proj-num" style="color:#a855f7">Project #3 — Week 5-6</div>
+        <div class="proj-title">MLPulse ⚡📊</div>
+        <div class="proj-subtitle">Production ML system — monitoring, drift detection, CI/CD pipeline</div>
+      </div>
+      <div class="proj-deadline" style="background:#a855f7">DEADLINE: Day 42</div>
+    </div>
+    <div class="proj-body">
+      <p>A real production ML system: FastAPI model serving + MLflow experiment tracking + Prometheus/Grafana monitoring + GitHub Actions CI/CD + model drift detection. Pure MLOps/Production focus — the skill that separates junior from senior in interviews.</p>
+      <div class="tech-tags">
+        <span class="tech-tag">FastAPI</span><span class="tech-tag">MLflow</span><span class="tech-tag">Prometheus</span>
+        <span class="tech-tag">Grafana</span><span class="tech-tag">GitHub Actions</span><span class="tech-tag">Docker Compose</span>
+        <span class="tech-tag">DVC</span><span class="tech-tag">Locust</span>
+      </div>
+      <ul class="deliverable-list">
+        <li>Model serving API: async FastAPI, batch endpoint, health checks</li>
+        <li>MLflow: har bir experiment run logging, model versioning, registry</li>
+        <li>Prometheus metrics: latency (p50/p95/p99), throughput, error rate, cost</li>
+        <li>Grafana dashboard: real-vaqt monitoring, alerting rules</li>
+        <li>Drift detection: PSI + KL divergence for feature and prediction drift</li>
+        <li>GitHub Actions CI/CD: test → lint → build → deploy pipeline</li>
+      </ul>
+      <div class="present-box">
+        <div class="label">📢 Presentation Script (15 min)</div>
+        <p>"Why isn't deploying a model enough? What happens in production? P99 latency is 120ms — if it spikes, Grafana fires an alert. What is drift? I'll show with real data. What does CI/CD give us?..."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT 4 -->
+  <div class="proj-card" style="border-left:3px solid var(--amber)">
+    <div class="proj-header">
+      <div>
+        <div class="proj-num">Project #4 — Week 7-8</div>
+        <div class="proj-title">NeuralNexus 🌐🤖</div>
+        <div class="proj-subtitle">Multi-tool autonomous AI agent with streaming UI</div>
+      </div>
+      <div class="proj-deadline">DEADLINE: Day 50</div>
+    </div>
+    <div class="proj-body">
+      <p>An autonomous AI agent with 4 custom tools (web search, code executor, PDF reader, calculator). ReAct reasoning loop. Streaming responses. Conversation memory. Cost tracking. The capstone that ties CV + NLP + MLOps together.</p>
+      <div class="tech-tags">
+        <span class="tech-tag">LangChain</span><span class="tech-tag">OpenAI API</span><span class="tech-tag">FastAPI</span>
+        <span class="tech-tag">SSE Streaming</span><span class="tech-tag">Redis</span><span class="tech-tag">Docker</span>
+        <span class="tech-tag">GitHub Actions</span><span class="tech-tag">Streamlit</span>
+      </div>
+      <ul class="deliverable-list">
+        <li>4 custom tools: web search (Tavily), Python executor (sandboxed), PDF reader, calculator</li>
+        <li>ReAct reasoning loop: Thought → Action → Observation → repeat until answer</li>
+        <li>Conversation memory: short-term (last 10) + long-term (summaries)</li>
+        <li>Streaming chat UI: real-time tool visualization (🔍 Searching... 💻 Running...)</li>
+        <li>Token cost tracking per conversation + daily budget alerts</li>
+        <li>Full CI/CD + Docker + production documentation + rate limiting</li>
+      </ul>
+      <div class="present-box">
+        <div class="label">🏁 Grand Demo (20 min)</div>
+        <p>The capstone demo: ask a complex question → watch the agent think → call tools → stream answer live. 5 min problem, 10 min live demo, 5 min Q&A. This is your portfolio hero piece.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHECKLIST ===== -->
+<div id="checklist" class="section">
+  <h2>Daily Discipline Checklist</h2>
+  
+  <div style="display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <div class="points-display" style="flex:1;min-width:200px">
+      <div class="points-num" id="total-points">0</div>
+      <div class="points-label">Total Points</div>
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+      <div class="progress-text" id="prog-text">0 / 14 today's tasks</div>
+    </div>
+    <div style="flex:2;min-width:280px">
+      <div style="background:var(--bg3);border:1px solid var(--border);padding:16px;height:100%">
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Points System</div>
+        <div style="font-size:12px;color:var(--text2);line-height:2">
+          ✅ Each completed task = <span style="color:var(--amber);font-weight:700">+1 pt</span><br>
+          📚 Deep Work block complete = <span style="color:var(--amber);font-weight:700">+3 pts</span><br>
+          🎯 Project feature shipped = <span style="color:var(--amber);font-weight:700">+5 pts</span><br>
+          🎤 Presentation given = <span style="color:var(--green);font-weight:700">+20 pts</span><br>
+          ❌ Skipped day = <span style="color:var(--red);font-weight:700">-3 pts</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="checklist-day">
+    <div class="checklist-header" onclick="toggleDay('morning')">
+      <span class="checklist-title">🌅 Morning (05:30–09:00) — Deep Work #1</span>
+      <span class="checklist-score" id="score-morning">0/5</span>
+    </div>
+    <div class="checklist-body" id="body-morning">
+      <div class="check-item" onclick="toggleCheck(this,3)">
+        <div class="check-box"></div><span class="check-text">Used AI prompt to understand today's concept deeply (not copy-paste)</span><span class="check-points">+3</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,3)">
+        <div class="check-box"></div><span class="check-text">Wrote notes in my own words (paper or Obsidian)</span><span class="check-points">+3</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,3)">
+        <div class="check-box"></div><span class="check-text">Wrote code by hand (understood every line)</span><span class="check-points">+3</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,1)">
+        <div class="check-box"></div><span class="check-text">Completed one uninterrupted focus block without distraction</span><span class="check-points">+1</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,1)">
+        <div class="check-box"></div><span class="check-text">Phone was in another room (zero distractions)</span><span class="check-points">+1</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="checklist-day">
+    <div class="checklist-header" onclick="toggleDay('afternoon')">
+      <span class="checklist-title">☀️ Afternoon (13:50–18:00) — Project Build</span>
+      <span class="checklist-score" id="score-afternoon">0/4</span>
+    </div>
+    <div class="checklist-body" id="body-afternoon">
+      <div class="check-item" onclick="toggleCheck(this,3)">
+        <div class="check-box"></div><span class="check-text">Completed at least 1 feature/module in current project</span><span class="check-points">+3</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,2)">
+        <div class="check-box"></div><span class="check-text">Encountered a bug and solved it (with understanding)</span><span class="check-points">+2</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,1)">
+        <div class="check-box"></div><span class="check-text">Can explain today's concept to someone else without notes</span><span class="check-points">+1</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,1)">
+        <div class="check-box"></div><span class="check-text">Pushed to GitHub</span><span class="check-points">+1</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="checklist-day">
+    <div class="checklist-header" onclick="toggleDay('project')">
+      <span class="checklist-title">📖 Mid-day (11:30–12:30) — Deep Work #2</span>
+      <span class="checklist-score" id="score-project">0/3</span>
+    </div>
+    <div class="checklist-body" id="body-project">
+      <div class="check-item" onclick="toggleCheck(this,5)">
+        <div class="check-box"></div><span class="check-text">Practiced coding exercises or reviewed yesterday's work</span><span class="check-points">+5</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,2)">
+        <div class="check-box"></div><span class="check-text">Read documentation or research paper for 20+ min</span><span class="check-points">+2</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,1)">
+        <div class="check-box"></div><span class="check-text">Can verbally explain a concept without looking at notes</span><span class="check-points">+1</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="checklist-day">
+    <div class="checklist-header" onclick="toggleDay('review')">
+      <span class="checklist-title">🌙 Evening (19:00–21:00) — Review + Planning</span>
+      <span class="checklist-score" id="score-review">0/4</span>
+    </div>
+    <div class="checklist-body" id="body-review">
+      <div class="check-item" onclick="toggleCheck(this,2)">
+        <div class="check-box"></div><span class="check-text">Summarized today's learning in 3 sentences</span><span class="check-points">+2</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,1)">
+        <div class="check-box"></div><span class="check-text">Set clear goals + time blocks for tomorrow</span><span class="check-points">+1</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,1)">
+        <div class="check-box"></div><span class="check-text">Checked deadline schedule — everything on track</span><span class="check-points">+1</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,2)">
+        <div class="check-box"></div><span class="check-text">Exercise / walking / stretching done today</span><span class="check-points">+2</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="summary-topline">
+        <div class="summary-eyebrow">Weekly Review Sync</div>
+        <div class="summary-status" id="weeklySyncStatus">Not synced</div>
+      </div>
+      <h3 id="weeklySummaryTitle">Week Review Checklist</h3>
+      <p>Finish this checklist, add one short summary, and sync it to the AI Tracker.</p>
+      <div class="checklist-body open" id="body-weekly-summary">
+        <div class="check-item" data-check-id="weekly-points-review" data-scope="weekly" data-pts="3" onclick="toggleCheck(this,3)">
+          <div class="check-box"></div><span class="check-text">Reviewed the week's total points, hours, and consistency</span><span class="check-points">+3</span>
+        </div>
+        <div class="check-item" data-check-id="weekly-gap-review" data-scope="weekly" data-pts="3" onclick="toggleCheck(this,3)">
+          <div class="check-box"></div><span class="check-text">Identified what was unclear, slow, or repeatedly blocked</span><span class="check-points">+3</span>
+        </div>
+        <div class="check-item" data-check-id="weekly-next-plan" data-scope="weekly" data-pts="4" onclick="toggleCheck(this,4)">
+          <div class="check-box"></div><span class="check-text">Set next week's priority topics and one hard execution rule</span><span class="check-points">+4</span>
+        </div>
+      </div>
+      <textarea class="summary-note" id="weeklySummaryNote" placeholder="Week summary: what moved, what slipped, what changes next week?"></textarea>
+      <div class="summary-meta">
+        <span>Sync this when the review is genuinely complete.</span>
+        <span class="summary-points">+12 pts</span>
+      </div>
+      <div class="summary-actions">
+        <button class="btn primary" type="button" onclick="saveWeeklySummary()">Sync Weekly Review</button>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-topline">
+        <div class="summary-eyebrow">Project Summary Sync</div>
+        <div class="summary-status" id="projectSyncStatus">Not synced</div>
+      </div>
+      <h3 id="projectSummaryTitle">Project Summary Checklist</h3>
+      <p>Use this after a good build push or milestone so the AI Tracker sees project-level progress too.</p>
+      <input class="project-name-input" id="projectSummaryName" type="text" placeholder="Custom project name">
+      <div class="checklist-body open" id="body-project-summary">
+        <div class="check-item" data-check-id="project-scope-status" data-scope="project" data-pts="4" onclick="toggleCheck(this,4)">
+          <div class="check-box"></div><span class="check-text">Captured current scope: done, in-progress, and still blocked</span><span class="check-points">+4</span>
+        </div>
+        <div class="check-item" data-check-id="project-tech-risks" data-scope="project" data-pts="4" onclick="toggleCheck(this,4)">
+          <div class="check-box"></div><span class="check-text">Named the hardest technical risk or bottleneck honestly</span><span class="check-points">+4</span>
+        </div>
+        <div class="check-item" data-check-id="project-proof-assets" data-scope="project" data-pts="4" onclick="toggleCheck(this,4)">
+          <div class="check-box"></div><span class="check-text">Listed proof assets: repo push, demo, screenshots, docs, or metrics</span><span class="check-points">+4</span>
+        </div>
+        <div class="check-item" data-check-id="project-next-milestone" data-scope="project" data-pts="4" onclick="toggleCheck(this,4)">
+          <div class="check-box"></div><span class="check-text">Defined the next milestone and what "done" means</span><span class="check-points">+4</span>
+        </div>
+      </div>
+      <textarea class="summary-note" id="projectSummaryNote" placeholder="Project summary: current state, risk, next milestone, and proof of progress."></textarea>
+      <div class="summary-meta">
+        <span>Best used after a milestone or before a deadline.</span>
+        <span class="summary-points">+18 pts</span>
+      </div>
+      <div class="summary-actions">
+        <button class="btn primary" type="button" onclick="saveProjectSummary()">Sync Project Summary</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="btns-row">
+    <button class="btn primary" onclick="saveDay()">Submit Daily Report ✓</button>
+    <button class="btn danger" onclick="resetDay()">Reset Checklist</button>
+  </div>
+</div>
+
+<!-- ===== REWARDS ===== -->
+<div id="rewards" class="section">
+  <h2>Discipline System — Rewards & Punishments</h2>
+
+  <div class="tip-box">
+    <p><strong>Core Rule:</strong> This system must work FOR you. If punishment is too harsh — you'll quit. If rewards are too small — no motivation. Be <strong>real</strong> on both sides.</p>
+  </div>
+
+  <!-- LIVE SCORE BAR -->
+  <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:24px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+      <div>
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Today's Discipline Score</div>
+        <div style="font-size:36px;font-weight:900;font-family:'JetBrains Mono',monospace;color:var(--amber)" id="rp-score-display">0 / 5</div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <div style="text-align:center;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 18px">
+          <div style="font-size:22px;font-weight:900;color:var(--green);font-family:'JetBrains Mono',monospace" id="rp-rewards-earned">0</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">Rewards Earned</div>
+        </div>
+        <div style="text-align:center;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 18px">
+          <div style="font-size:22px;font-weight:900;color:var(--red);font-family:'JetBrains Mono',monospace" id="rp-punish-triggered">0</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">Punishments Active</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--bg2);border-radius:99px;height:10px;overflow:hidden">
+      <div id="rp-score-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:99px;transition:width .6s ease"></div>
+    </div>
+  </div>
+
+  <!-- REWARDS & PUNISHMENTS GRID -->
+  <div class="rp-grid" style="gap:20px">
+
+    <!-- REWARDS -->
+    <div style="background:var(--bg3);border:1px solid #2a5c3a;border-radius:14px;overflow:hidden">
+      <div style="background:linear-gradient(135deg,#0d2e1a,#163d25);padding:18px 20px;border-bottom:1px solid #2a5c3a;display:flex;align-items:center;gap:10px">
+        <span style="font-size:26px">🏆</span>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#4ade80;letter-spacing:.02em">REWARDS</div>
+          <div style="font-size:11px;color:#86efac;margin-top:1px">Click to mark as earned today</div>
+        </div>
+      </div>
+      <div style="padding:8px">
+        <div class="rp-interactive-item reward-item" onclick="toggleRP(this,'reward')" data-active="false">
+          <div class="rp-item-icon">📅</div>
+          <div class="rp-item-body">
+            <div class="rp-item-title">Daily — All Tasks Done</div>
+            <div class="rp-item-desc">Favorite meal + 1 hour gaming or show</div>
+          </div>
+          <div class="rp-check">○</div>
+        </div>
+        <div class="rp-interactive-item reward-item" onclick="toggleRP(this,'reward')" data-active="false">
+          <div class="rp-item-icon">📈</div>
+          <div class="rp-item-body">
+            <div class="rp-item-title">Weekly — 85%+ Score</div>
+            <div class="rp-item-desc">New book/course, movie, meet friends</div>
+          </div>
+          <div class="rp-check">○</div>
+        </div>
+        <div class="rp-interactive-item reward-item" onclick="toggleRP(this,'reward')" data-active="false">
+          <div class="rp-item-icon">🎯</div>
+          <div class="rp-item-body">
+            <div class="rp-item-title">Project Presentation</div>
+            <div class="rp-item-desc">Special dinner or small treat purchase</div>
+          </div>
+          <div class="rp-check">○</div>
+        </div>
+        <div class="rp-interactive-item reward-item" onclick="toggleRP(this,'reward')" data-active="false">
+          <div class="rp-item-icon">🏅</div>
+          <div class="rp-item-body">
+            <div class="rp-item-title">Monthly — 90%+</div>
+            <div class="rp-item-desc">New gadget/accessory OR premium course</div>
+          </div>
+          <div class="rp-check">○</div>
+        </div>
+        <div class="rp-interactive-item reward-item" onclick="toggleRP(this,'reward')" data-active="false">
+          <div class="rp-item-icon">🏁</div>
+          <div class="rp-item-body">
+            <div class="rp-item-title">Demo Day — Grand Finale</div>
+            <div class="rp-item-desc">Major celebration — you earned it</div>
+          </div>
+          <div class="rp-check">○</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PUNISHMENTS -->
+    <div style="background:var(--bg3);border:1px solid #5c2a2a;border-radius:14px;overflow:hidden">
+      <div style="background:linear-gradient(135deg,#2e0d0d,#3d1616);padding:18px 20px;border-bottom:1px solid #5c2a2a;display:flex;align-items:center;gap:10px">
+        <span style="font-size:26px">⚡</span>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#f87171;letter-spacing:.02em">PUNISHMENTS</div>
+          <div style="font-size:11px;color:#fca5a5;margin-top:1px">Click to mark as triggered today</div>
+        </div>
+      </div>
+      <div style="padding:8px">
+        <div class="rp-interactive-item punish-item" onclick="toggleRP(this,'punish')" data-active="false">
+          <div class="rp-item-icon">😴</div>
+          <div class="rp-item-body">
+            <div class="rp-item-title">Missed Day</div>
+            <div class="rp-item-desc">No entertainment — no games, shows, social media</div>
+          </div>
+          <div class="rp-check">○</div>
+        </div>
+        <div class="rp-interactive-item punish-item" onclick="toggleRP(this,'punish')" data-active="false">
+          <div class="rp-item-icon">📝</div>
+          <div class="rp-item-body">
+            <div class="rp-item-title">Incomplete Tasks</div>
+            <div class="rp-item-desc">Next day gets +1 extra exercise</div>
+          </div>
+          <div class="rp-check">○</div>
+        </div>
+        <div class="rp-interactive-item punish-item" onclick="toggleRP(this,'punish')" data-active="false">
+          <div class="rp-item-icon">👥</div>
+          <div class="rp-item-body">
+            <div class="rp-item-title">3 Days Skipped</div>
+            <div class="rp-item-desc">Public accountability post on LinkedIn/Telegram</div>
+          </div>
+          <div class="rp-check">○</div>
+        </div>
+        <div class="rp-interactive-item punish-item" onclick="toggleRP(this,'punish')" data-active="false">
+          <div class="rp-item-icon">⏰</div>
+          <div class="rp-item-body">
+            <div class="rp-item-title">Missed Deadline</div>
+            <div class="rp-item-desc">Next rest day becomes a 12h work day</div>
+          </div>
+          <div class="rp-check">○</div>
+        </div>
+        <div class="rp-interactive-item punish-item" onclick="toggleRP(this,'punish')" data-active="false">
+          <div class="rp-item-icon">🚫</div>
+          <div class="rp-item-body">
+            <div class="rp-item-title">Copy-Paste Code</div>
+            <div class="rp-item-desc">Re-learn that entire topic from scratch</div>
+          </div>
+          <div class="rp-check">○</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCOUNTABILITY -->
+  <h2 style="margin-top:32px">Accountability System</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
+
+    <div style="background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:10px;padding:20px">
+      <div style="font-size:13px;font-weight:800;color:var(--amber);margin-bottom:14px;text-transform:uppercase;letter-spacing:.08em">📋 Daily Tracker</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2)"><span style="font-size:16px;flex-shrink:0">✅</span><span>What I did today</span></div>
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2)"><span style="font-size:16px;flex-shrink:0">❌</span><span>What I didn't / what was hard</span></div>
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2)"><span style="font-size:16px;flex-shrink:0">🔜</span><span>What I'll do tomorrow</span></div>
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2)"><span style="font-size:16px;flex-shrink:0">📊</span><span>Today's score: __ / 40</span></div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:10px;padding:20px">
+      <div style="font-size:13px;font-weight:800;color:var(--teal);margin-bottom:14px;text-transform:uppercase;letter-spacing:.08em">📈 Weekly Review</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2)"><span style="font-size:16px;flex-shrink:0">📈</span><span>Weekly total points</span></div>
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2)"><span style="font-size:16px;flex-shrink:0">🔍</span><span>Which topic was unclear?</span></div>
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2)"><span style="font-size:16px;flex-shrink:0">🔧</span><span>What to change next week?</span></div>
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2)"><span style="font-size:16px;flex-shrink:0">🎯</span><span>Project progress status?</span></div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:10px;padding:20px">
+      <div style="font-size:13px;font-weight:800;color:var(--green);margin-bottom:14px;text-transform:uppercase;letter-spacing:.08em">👥 Peer Accountability</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7">
+        Find an accountability partner. Daily WhatsApp message:
+        <div style="margin-top:10px;background:var(--bg2);border-left:3px solid var(--green);padding:10px 12px;border-radius:6px;font-style:italic;font-size:12px;color:var(--text)">
+          "✅ Today: learned attention mechanism, started YOLO training"
+        </div>
+        <div style="margin-top:8px">They report to you too.</div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .rp-interactive-item {
+      display:flex;align-items:center;gap:14px;
+      padding:14px 16px;border-radius:10px;margin:4px 0;
+      cursor:pointer;transition:all .2s;border:1px solid transparent;
+      user-select:none;
+    }
+    .rp-interactive-item:hover { filter:brightness(1.15); }
+    .rp-item-icon { font-size:22px;flex-shrink:0;width:32px;text-align:center; }
+    .rp-item-body { flex:1;min-width:0; }
+    .rp-item-title { font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px; }
+    .rp-item-desc  { font-size:12px;color:var(--text3);line-height:1.5; }
+    .rp-check { font-size:20px;flex-shrink:0;width:28px;text-align:center;transition:all .2s; }
+
+    .reward-item { background:rgba(74,222,128,.04); }
+    .reward-item[data-active="true"] {
+      background:rgba(74,222,128,.14);
+      border-color:rgba(74,222,128,.4);
+    }
+    .reward-item[data-active="true"] .rp-check { color:#4ade80; }
+    .reward-item[data-active="true"] .rp-item-title { color:#4ade80; }
+
+    .punish-item { background:rgba(248,113,113,.04); }
+    .punish-item[data-active="true"] {
+      background:rgba(248,113,113,.14);
+      border-color:rgba(248,113,113,.4);
+    }
+    .punish-item[data-active="true"] .rp-check { color:#f87171; }
+    .punish-item[data-active="true"] .rp-item-title { color:#f87171; }
+  </style>
+
+  <script>
+    function toggleRP(el, type) {
+      const isActive = el.dataset.active === 'true';
+      el.dataset.active = isActive ? 'false' : 'true';
+      el.querySelector('.rp-check').textContent = isActive ? '○' : '✔';
+      updateRPScore();
+    }
+    function updateRPScore() {
+      const rewards  = document.querySelectorAll('.reward-item[data-active="true"]').length;
+      const punishes = document.querySelectorAll('.punish-item[data-active="true"]').length;
+      const total    = document.querySelectorAll('.reward-item').length;
+      document.getElementById('rp-rewards-earned').textContent   = rewards;
+      document.getElementById('rp-punish-triggered').textContent = punishes;
+      document.getElementById('rp-score-display').textContent    = rewards + ' / ' + total;
+      const pct = Math.round((rewards / total) * 100);
+      document.getElementById('rp-score-bar').style.width = pct + '%';
+      const bar = document.getElementById('rp-score-bar');
+      bar.style.background = pct >= 80
+        ? 'linear-gradient(90deg,var(--teal),var(--green))'
+        : pct >= 40
+          ? 'linear-gradient(90deg,var(--amber),var(--teal))'
+          : 'linear-gradient(90deg,var(--red),var(--amber))';
+    }
+  </script>
+</div>
+
+<!-- ===== AI PROMPTS ===== -->
+<div id="prompts" class="section">
+  <h2>AI-Powered Learning Prompts</h2>
+  <div class="tip-box">
+    <p><strong>Golden Rule:</strong> Never copy-paste AI code. AI is your <strong>tutor and questioner</strong>. Every prompt forces understanding. You write the code — AI explains the logic.</p>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-header"><span class="prompt-type">Understand</span><span class="prompt-title">Learning a New Concept</span></div>
+    <div class="prompt-body">
+      <p>Use BEFORE studying a new topic:</p>
+      <div class="code-block">You are an experienced AI/ML teacher. I want to learn [TOPIC].
+
+1. Assume I know nothing — start with core intuition, not formulas
+2. Give one simple real-life analogy
+3. Then go technical — but explain WHY at each step
+4. End with 3 questions to test my understanding
+5. If I answer wrong, guide me (don't just tell me)
+
+[TOPIC] = [e.g.: attention mechanism, Docker layers, gradient descent, YOLO architecture]</div>
+      <button class="copy-btn" onclick="copyText(this)">copy prompt</button>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-header"><span class="prompt-type">Analyze</span><span class="prompt-title">Understanding Code Logic</span></div>
+    <div class="prompt-body">
+      <p>When reading existing code — understand, don't copy:</p>
+      <div class="code-block">I'm reading this code. WITHOUT giving me the code itself, explain:
+
+1. What does this code do? (1-2 sentences)
+2. What algorithmic ideas are used?
+3. If I wrote this from scratch, what steps would I follow?
+4. What should I watch out for when implementing?
+
+[CODE DESCRIPTION — not full code, just describe what it does]
+
+Example: "This is a PyTorch custom Dataset class with __len__ and __getitem__"</div>
+      <button class="copy-btn" onclick="copyText(this)">copy prompt</button>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-header"><span class="prompt-type">Test</span><span class="prompt-title">Self-Knowledge Check</span></div>
+    <div class="prompt-body">
+      <p>After learning — test your understanding:</p>
+      <div class="code-block">I learned [TOPIC]. Test me:
+
+1. First I'll explain — you listen: [MY EXPLANATION]
+2. Where am I wrong or incomplete?
+3. What important part did I miss?
+4. As a senior ML engineer, what interview question would you ask?
+5. What answer would create a "wow, this person gets it" impression?
+
+[TOPIC] = PyTorch autograd / YOLO architecture / RAG chunking / Vector DB HNSW...</div>
+      <button class="copy-btn" onclick="copyText(this)">copy prompt</button>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-header"><span class="prompt-type">Debug</span><span class="prompt-title">Understanding Errors (Not Getting Fixes)</span></div>
+    <div class="prompt-body">
+      <p>When code errors — DON'T ask for the fix directly:</p>
+      <div class="code-block">My code gave this error: [ERROR MESSAGE]
+My code was trying to: [GOAL]
+
+WITHOUT giving me the fix directly:
+1. What does this error mean? (plain English)
+2. What causes this error? (2-3 possibilities)
+3. How would I debug this step by step?
+4. How do I prevent similar errors in the future?</div>
+      <button class="copy-btn" onclick="copyText(this)">copy prompt</button>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-header"><span class="prompt-type">Architecture</span><span class="prompt-title">Designing Project Structure</span></div>
+    <div class="prompt-body">
+      <p>Before starting a new project:</p>
+      <div class="code-block">I want to build [PROJECT NAME].
+Goal: [short description]
+Stack: [technology list]
+
+Give me:
+1. Core system components (boxes + responsibilities)
+2. Data flow: input → ... → output
+3. Top 3 hardest technical challenges
+4. Where would a senior engineer start first?
+5. Minimum feature set for a 1-week MVP?
+
+NO CODE — architecture and ideas only.</div>
+      <button class="copy-btn" onclick="copyText(this)">copy prompt</button>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-header"><span class="prompt-type">Interview</span><span class="prompt-title">Presentation & Interview Prep</span></div>
+    <div class="prompt-body">
+      <p>Before a demo or interview:</p>
+      <div class="code-block">I'm giving a 10-15 min technical presentation on [PROJECT/TOPIC].
+Project: [short description]
+Audience: [teacher/employer/peers]
+
+1. What questions might they ask? (Top 10 technical)
+2. Which questions have "traps"? (dangerous to answer without thinking)
+3. What opening sentence creates the most impact?
+4. What weakness might the audience notice?
+5. What should I say for a "this engineer really knows it" impression?</div>
+      <button class="copy-btn" onclick="copyText(this)">copy prompt</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CV SECTION ===== -->
+<div id="cv" class="section">
+  <h2>Computer Vision — Integration Roadmap</h2>
+
+  <div class="tip-box">
+    <p><strong>Why CV matters:</strong> You're becoming an AI/ML Engineer — not just an LLM wrapper. Engineers who know CV + GenAI + MLOps are the <strong>most valuable</strong> in the market. Your CV projects will set you apart.</p>
+  </div>
+
+  <h3 style="margin-bottom:14px">CV Skill Progression</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:24px">
+    
+    <div style="background:var(--bg3);border:1px solid var(--border);border-top:3px solid var(--teal);padding:16px">
+      <div style="font-size:11px;color:var(--teal);font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">Level 1 — Week 1</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:8px">Image Foundations</div>
+      <ul style="list-style:none;font-size:12px;color:var(--text2)">
+        <li style="padding:3px 0">→ PyTorch tensors ↔ OpenCV array</li>
+        <li style="padding:3px 0">→ Preprocessing pipeline (resize, normalize)</li>
+        <li style="padding:3px 0">→ Augmentation (flips, rotations, color)</li>
+        <li style="padding:3px 0">→ CNN visualizing (feature maps, filters)</li>
+        <li style="padding:3px 0">→ Transfer learning (EfficientNet, ResNet)</li>
+      </ul>
+    </div>
+
+    <div style="background:var(--bg3);border:1px solid var(--border);border-top:3px solid var(--amber);padding:16px">
+      <div style="font-size:11px;color:var(--amber);font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">Level 2 — Week 2</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:8px">Detection & Tracking</div>
+      <ul style="list-style:none;font-size:12px;color:var(--text2)">
+        <li style="padding:3px 0">→ YOLOv8 train, val, inference</li>
+        <li style="padding:3px 0">→ mAP, IoU, precision/recall</li>
+        <li style="padding:3px 0">→ Multi-object tracking (DeepSORT)</li>
+        <li style="padding:3px 0">→ Custom dataset labeling (LabelImg)</li>
+        <li style="padding:3px 0">→ RTSP stream processing</li>
+      </ul>
+    </div>
+
+    <div style="background:var(--bg3);border:1px solid var(--border);border-top:3px solid var(--coral);padding:16px">
+      <div style="font-size:11px;color:var(--coral);font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">Level 3 — Week 3-4</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:8px">Visual Embeddings + Multimodal</div>
+      <ul style="list-style:none;font-size:12px;color:var(--text2)">
+        <li style="padding:3px 0">→ CLIP (image-text joint embedding)</li>
+        <li style="padding:3px 0">→ Visual similarity search</li>
+        <li style="padding:3px 0">→ Image → vector → VectorDB</li>
+        <li style="padding:3px 0">→ t-SNE vizualizatsiya</li>
+        <li style="padding:3px 0">→ Cross-modal retrieval</li>
+      </ul>
+    </div>
+
+    <div style="background:var(--bg3);border:1px solid var(--border);border-top:3px solid var(--blue);padding:16px">
+      <div style="font-size:11px;color:var(--blue);font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">Level 4 — Week 5-8</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:8px">Production CV + MLOps</div>
+      <ul style="list-style:none;font-size:12px;color:var(--text2)">
+        <li style="padding:3px 0">→ Image + text RAG pipeline</li>
+        <li style="padding:3px 0">→ Vision LLMs (LLaVA, GPT-4V API)</li>
+        <li style="padding:3px 0">→ Image captioning + VQA</li>
+        <li style="padding:3px 0">→ Grounding DINO (text → bbox)</li>
+        <li style="padding:3px 0">→ SAM (Segment Anything basics)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:14px">CV + MLOps Integration (Week 5-8)</h3>
+  <div style="background:var(--bg3);border:1px solid var(--border);padding:16px">
+    <ul style="list-style:none;font-size:12px;color:var(--text2)">
+      <li style="padding:5px 0;border-bottom:1px solid var(--border)">→ <b style="color:var(--text)">Model serving:</b> YOLOv8 + FastAPI async inference</li>
+      <li style="padding:5px 0;border-bottom:1px solid var(--border)">→ <b style="color:var(--text)">Optimization:</b> ONNX + TensorRT export — 5-10x speedup</li>
+      <li style="padding:5px 0;border-bottom:1px solid var(--border)">→ <b style="color:var(--text)">Monitoring:</b> Confidence distribution drift + bbox size drift</li>
+      <li style="padding:5px 0;border-bottom:1px solid var(--border)">→ <b style="color:var(--text)">Edge deploy:</b> ONNX + INT8 quantization for edge devices</li>
+      <li style="padding:5px 0">→ <b style="color:var(--text)">Batch processing:</b> Large dataset inference optimization</li>
+    </ul>
+  </div>
+
+  <!-- CV STACK VISUAL -->
+  <h3 style="margin:28px 0 14px">CV Pipeline — How It All Connects</h3>
+  <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px;overflow-x:auto">
+    <div style="display:flex;align-items:center;gap:0;min-width:600px;justify-content:center;flex-wrap:nowrap">
+      <div style="text-align:center;padding:12px 16px;background:var(--bg2);border:1px solid var(--teal);border-radius:8px;min-width:100px">
+        <div style="font-size:20px;margin-bottom:4px">📷</div>
+        <div style="font-size:11px;font-weight:700;color:var(--teal)">INPUT</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px">Camera / Image / Video</div>
+      </div>
+      <div style="color:var(--text3);font-size:20px;padding:0 6px">→</div>
+      <div style="text-align:center;padding:12px 16px;background:var(--bg2);border:1px solid var(--amber);border-radius:8px;min-width:100px">
+        <div style="font-size:20px;margin-bottom:4px">⚙️</div>
+        <div style="font-size:11px;font-weight:700;color:var(--amber)">PREPROCESS</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px">OpenCV · Albumentations</div>
+      </div>
+      <div style="color:var(--text3);font-size:20px;padding:0 6px">→</div>
+      <div style="text-align:center;padding:12px 16px;background:var(--bg2);border:1px solid var(--coral);border-radius:8px;min-width:100px">
+        <div style="font-size:20px;margin-bottom:4px">🧠</div>
+        <div style="font-size:11px;font-weight:700;color:var(--coral)">MODEL</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px">YOLOv8 · CLIP · OSNet</div>
+      </div>
+      <div style="color:var(--text3);font-size:20px;padding:0 6px">→</div>
+      <div style="text-align:center;padding:12px 16px;background:var(--bg2);border:1px solid var(--blue);border-radius:8px;min-width:100px">
+        <div style="font-size:20px;margin-bottom:4px">🔍</div>
+        <div style="font-size:11px;font-weight:700;color:var(--blue)">TRACK / EMBED</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px">ByteTrack · VectorDB</div>
+      </div>
+      <div style="color:var(--text3);font-size:20px;padding:0 6px">→</div>
+      <div style="text-align:center;padding:12px 16px;background:var(--bg2);border:1px solid var(--green);border-radius:8px;min-width:100px">
+        <div style="font-size:20px;margin-bottom:4px">🚀</div>
+        <div style="font-size:11px;font-weight:700;color:var(--green)">DEPLOY</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px">FastAPI · ONNX · Docker</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY METRICS STRIP -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0">
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+      <div style="font-size:26px;font-weight:900;color:var(--teal);font-family:'JetBrains Mono',monospace">4</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">CV Levels</div>
+    </div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+      <div style="font-size:26px;font-weight:900;color:var(--amber);font-family:'JetBrains Mono',monospace">8</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">Weeks of Training</div>
+    </div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+      <div style="font-size:26px;font-weight:900;color:var(--coral);font-family:'JetBrains Mono',monospace">10x</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">ONNX Speedup</div>
+    </div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+      <div style="font-size:26px;font-weight:900;color:var(--blue);font-family:'JetBrains Mono',monospace">&lt;25ms</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">Inference Target</div>
+    </div>
+  </div>
+
+  <!-- VIDEO RESOURCES -->
+  <h3 style="margin:28px 0 14px">📺 Must-Watch — CV Foundation Videos</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;margin-bottom:24px">
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+      <div style="position:relative;padding-bottom:56.25%;height:0">
+        <iframe
+          src="https://www.youtube.com/embed/jSgdL1zX4h8"
+          title="Computer Vision — YOLOv8 & Object Detection"
+          style="position:absolute;top:0;left:0;width:100%;height:100%;border:none"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          loading="lazy">
+        </iframe>
+      </div>
+      <div style="padding:12px 14px">
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">Object Detection & Tracking Deep Dive</div>
+        <div style="font-size:11px;color:var(--text3)">Week 2 uchun — YOLOv8, ByteTrack, Re-ID pipeline</div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+      <div style="position:relative;padding-bottom:56.25%;height:0">
+        <iframe
+          src="https://www.youtube.com/embed/tfpGS_doPvY"
+          title="Computer Vision — Full Course"
+          style="position:absolute;top:0;left:0;width:100%;height:100%;border:none"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          loading="lazy">
+        </iframe>
+      </div>
+      <div style="padding:12px 14px">
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">CV Full Course — Foundations to Production</div>
+        <div style="font-size:11px;color:var(--text3)">Week 1-4 uchun — image processing, CNN, embeddings</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip-box" style="margin-top:20px">
+    <p><strong>Interview advantage:</strong> Most candidates say "I worked with LLMs." You say: "I built a real-time CV system, multimodal RAG, and production ML monitoring with CI/CD." That's CV + GenAI + MLOps — <strong>extremely rare combination.</strong></p>
+  </div>
+</div>
+<div id="progressModal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 style="color: var(--text); margin: 0;">🎯 Daily Report</h3>
+      <button onclick="closeModal()" class="close-btn">&times;</button>
+    </div>
+    <form id="dailyProgressForm" class="modal-form">
+      <p class="modal-subtitle" style="margin-bottom:18px">Log your work, focus, and reflections. Data feeds your AI Tracker dashboard.</p>
+      <div class="focus-panel">
+        <div class="focus-panel-title">End of Day Summary</div>
+        <p>Record: time spent, tasks completed, main focus area, and what was challenging.</p>
+      </div>
+      <div class="form-grid">
+      <div class="form-group">
+        <label>Hours Studied:</label>
+        <input type="number" id="hours" step="0.5" required placeholder="Masalan: 4.5">
+        <span class="input-hint">Enter in hours. e.g. 3, 4.5, 7</span>
+      </div>
+      <div class="form-group">
+        <label>Tasks Completed:</label>
+        <input type="number" id="tasks" required placeholder="Masalan: 5">
+        <span class="input-hint">Number of tasks finished today</span>
+      </div>
+      <div class="form-group">
+        <label>Main Focus:</label>
+        <select id="focus" required onchange="toggleManualFocusInput()">
+          <option value="Computer Vision">Computer Vision (YOLO, OpenCV)</option>
+          <option value="Deep Learning">Deep Learning / PyTorch</option>
+          <option value="NLP / Transformers">NLP / Transformers</option>
+          <option value="RAG / Vector DB">RAG / Vector DB</option>
+          <option value="MLOps / Deploy">MLOps / Deploy</option>
+          <option value="__manual__">Other (manual)</option>
+        </select>
+        <input type="text" id="manualFocus" class="manual-focus-input" placeholder="Write your custom focus here">
+      </div>
+      <div class="form-group">
+        <label>Difficulty (1-5):</label>
+        <input type="number" id="difficulty" min="1" max="5" value="3" required>
+        <span class="input-hint">1 = easy, 5 = very hard day</span>
+      </div>
+      <div class="form-group full">
+        <label>Notes / Reflections:</label>
+        <textarea id="notes" rows="4" placeholder="What did you learn? What was hard? What will you change tomorrow?"></textarea>
+      </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="submit-btn">Save Report</button>
+      </div>
+    </form>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/auth.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/db-bootstrap.js"></script>
+<script>
+  // ── AUTH GUARD ──
+  (async function() {
+    const user = await Auth.requireAuth();
+    if (!user) return;
+    // Show username in header
+    const el = document.getElementById('headerUsername');
+    if (el) el.textContent = user.fullName || user.username;
+  })();
+</script>
+<script>
+  // ── MISSION START DATE ──
+  const MISSION_START = new Date('2026-03-22');
+
+  function getCurrentWeek() {
+    const days = Math.floor((new Date() - MISSION_START) / 86400000);
+    return Math.min(8, Math.max(1, Math.floor(days / 7) + 1));
+  }
+
+  // ── TOAST ──
+  function showToast(msg, type = 'info') {
+    const t = document.createElement('div');
+    t.className = 'toast toast-' + type;
+    t.textContent = msg;
+    document.body.appendChild(t);
+    requestAnimationFrame(() => t.classList.add('show'));
+    setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 2800);
+  }
+
+  // ── NAV ──
+  function showSection(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (btn) btn.classList.add('active');
+  }
+
+  // ── CHECKLIST ──
+  const CHECKLIST_KEY = 'checklist_' + new Date().toISOString().split('T')[0];
+  let totalPoints = 0;
+
+  function saveChecklistState() {
+    const state = {};
+    document.querySelectorAll('.check-item').forEach((el, i) => {
+      state[i] = el.classList.contains('checked');
+    });
+    localStorage.setItem(CHECKLIST_KEY, JSON.stringify(state));
+  }
+
+  function loadChecklistState() {
+    const saved = localStorage.getItem(CHECKLIST_KEY);
+    if (!saved) return;
+    const state = JSON.parse(saved);
+    document.querySelectorAll('.check-item').forEach((el, i) => {
+      if (state[i]) {
+        const pts = parseInt(el.getAttribute('data-pts') || 1);
+        el.classList.add('checked');
+        el.querySelector('.check-box').textContent = '✓';
+        totalPoints += pts;
+      }
+    });
+    updateScore();
+    ['morning','afternoon','project','review'].forEach(id => {
+      const b = document.getElementById('body-' + id);
+      if (b && b.querySelectorAll('.check-item.checked').length > 0) b.classList.add('open');
+      updateScoreLabel(id);
+    });
+  }
+
+  function toggleDay(id) {
+    document.getElementById('body-' + id).classList.toggle('open');
+  }
+
+  function toggleCheck(el, pts) {
+    el.classList.toggle('checked');
+    const box = el.querySelector('.check-box');
+    if (el.classList.contains('checked')) {
+      box.textContent = '✓';
+      totalPoints += pts;
+    } else {
+      box.textContent = '';
+      totalPoints -= pts;
+    }
+    updateScore();
+    updateScoreForDay(el);
+    saveChecklistState();
+  }
+
+  function updateScore() {
+    document.getElementById('total-points').textContent = totalPoints;
+    const maxPts = 42;
+    const pct = Math.min(100, Math.round(totalPoints / maxPts * 100));
+    document.getElementById('prog-fill').style.width = pct + '%';
+    const checked = document.querySelectorAll('.check-item.checked').length;
+    const total = document.querySelectorAll('.check-item').length;
+    document.getElementById('prog-text').textContent = checked + ' / ' + total + " today's tasks";
+  }
+
+  function updateScoreForDay(el) {
+    const body = el.closest('.checklist-body');
+    const id = body.id.replace('body-', '');
+    updateScoreLabel(id);
+  }
+
+  function updateScoreLabel(id) {
+    const b = document.getElementById('body-' + id);
+    const s = document.getElementById('score-' + id);
+    if (b && s) s.textContent = b.querySelectorAll('.check-item.checked').length + '/' + b.querySelectorAll('.check-item').length;
+  }
+
+  // ── MODAL ──
+  function saveDay() {
+    document.getElementById('progressModal').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('progressModal').style.display = 'none';
+  }
+
+  function resetDay() {
+    if (!confirm('Reset all checklist items for today?')) return;
+    document.querySelectorAll('.check-item.checked').forEach(el => {
+      el.classList.remove('checked');
+      el.querySelector('.check-box').textContent = '';
+    });
+    totalPoints = 0;
+    updateScore();
+    ['morning','afternoon','project','review'].forEach(id => updateScoreLabel(id));
+    localStorage.removeItem(CHECKLIST_KEY);
+  }
+
+  function copyText(btn) {
+    const code = btn.previousElementSibling.textContent;
+    navigator.clipboard.writeText(code).then(() => {
+      btn.textContent = '✓ copied!';
+      setTimeout(() => btn.textContent = 'copy prompt', 2000);
+    }).catch(() => showToast('Copy failed — try manually', 'error'));
+  }
+
+  // ── STATS ──
+  async function refreshStats() {
+    if (!window.DB) return;
+    try {
+      const stats = await window.DB.DailyLogs.getStats();
+      if (document.getElementById('statHours')) document.getElementById('statHours').textContent = stats.totalHours;
+      if (document.getElementById('statStreak')) document.getElementById('statStreak').textContent = stats.currentStreak;
+      const { data: rewards } = await window.DB.RewardsLog.getAll();
+      let pts = 0;
+      if (rewards) rewards.forEach(r => pts += (r.points || 0));
+      if (document.getElementById('statPoints')) document.getElementById('statPoints').textContent = pts;
+      return stats;
+    } catch(e) { console.log('Stats error:', e); }
+  }
+
+  // ── FORM SUBMIT ──
+  document.addEventListener('DOMContentLoaded', () => {
+    // Restore checklist from today's localStorage
+    loadChecklistState();
+
+    // Load stats from DB
+    refreshStats();
+
+    // Form handler
+    const form = document.getElementById('dailyProgressForm');
+    if (!form) return;
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = form.querySelector('.submit-btn');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+      try {
+        if (!window.DB || !window.DB.DailyLogs) throw new Error('Database client is not available');
+        const checked = document.querySelectorAll('.check-item.checked').length;
+        const focusVal = document.getElementById('focus').value;
+        const payload = {
+          date: new Date().toISOString().split('T')[0],
+          hours: parseFloat(document.getElementById('hours').value) || 0,
+          tasksCompleted: parseInt(document.getElementById('tasks').value) || checked,
+          focusArea: focusVal === '__manual__' ? (document.getElementById('notes').value.split('\n')[0] || 'Other') : focusVal,
+          difficulty: parseInt(document.getElementById('difficulty').value) || 3,
+          mood: 'okay',
+          energyLevel: 3,
+          notes: document.getElementById('notes').value,
+          checklist: { totalPoints, checkedItems: checked },
+          weekNumber: getCurrentWeek()
+        };
+        const { error } = await window.DB.DailyLogs.create(payload);
+        if (error) throw error;
+        let stats = { totalHours: 0, currentStreak: 0, totalTasks: 0 };
+        let triggered = [];
+
+        try {
+          stats = await window.DB.DailyLogs.getStats();
+        } catch (statsError) {
+          console.warn('Stats refresh after save failed:', statsError);
+        }
+
+        try {
+          triggered = await window.DB.RewardEngine.evaluate({ hours: document.getElementById('hours').value }, stats);
+        } catch (rewardError) {
+          console.warn('Reward evaluation failed:', rewardError);
+          triggered = [];
+        }
+        closeModal();
+        try {
+          await refreshStats();
+        } catch (refreshError) {
+          console.warn('UI stats refresh failed:', refreshError);
+        }
+        if (triggered.length > 0) {
+          triggered.forEach((t, i) => {
+            const icon = t.type === 'reward' ? '🏆' : '⚠️';
+            setTimeout(() => showToast(icon + ' ' + t.title + ' (' + (t.points > 0 ? '+' : '') + t.points + ' pts)', t.type === 'reward' ? 'success' : 'error'), i * 700);
+          });
+        } else {
+          showToast('Daily report saved!', 'success');
+        }
+        form.reset();
+      } catch(err) {
+        console.error(err);
+        showToast('Error saving: ' + (err.message || 'Unknown error'), 'error');
+      }
+      btn.disabled = false;
+      btn.textContent = 'Save Report';
+    });
+  });
+
+  const POMODORO_KEY = 'pomodoro_' + new Date().toISOString().split('T')[0];
+  const CALENDAR_KEY = 'planner_calendar_items';
+  const PROJECT_NAME_KEY = 'project_summary_name_';
+  const MOTIVATION_STATE_KEY = 'motivation_wall_state';
+  const MOTIVATION_EMBED_KEY = 'motivation_embed_url';
+  let pomodoroInterval = null;
+  let motivationImageInterval = null;
+  let motivationQuoteInterval = null;
+  let pomodoroState = { mode: 'focus', secondsLeft: 25 * 60, running: false, cyclesCompleted: 0 };
+  let summaryCache = { weeklyReports: [], projectSummaries: [] };
+  const motivationQuotes = [
+    'Discipline creates options that motivation alone never can.',
+    'Small honest sessions beat dramatic plans that never ship.',
+    'You do not need perfect energy. You need a clean next move.',
+    'Depth wins when attention stops leaking everywhere.',
+    'A finished artifact teaches more than another day of vague studying.',
+    'Consistency is how hard topics slowly become normal.'
+  ];
+
+  function readJsonStorage(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return JSON.parse(JSON.stringify(fallback));
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(fallback)) return Array.isArray(parsed) ? parsed : JSON.parse(JSON.stringify(fallback));
+      return parsed && typeof parsed === 'object' ? parsed : JSON.parse(JSON.stringify(fallback));
+    } catch (error) {
+      return JSON.parse(JSON.stringify(fallback));
+    }
+  }
+
+  function writeJsonStorage(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function getMotivationState() {
+    const saved = readJsonStorage(MOTIVATION_STATE_KEY, {});
+    return {
+      imageSeed: saved.imageSeed || ('focus-' + Date.now()),
+      quoteIndex: Number.isFinite(Number(saved.quoteIndex)) ? Number(saved.quoteIndex) : 0
+    };
+  }
+
+  function saveMotivationState(state) {
+    writeJsonStorage(MOTIVATION_STATE_KEY, state);
+  }
+
+  function getMotivationImageUrl(seed) {
+    return 'https://picsum.photos/seed/' + encodeURIComponent(seed) + '/960/560';
+  }
+
+  function normalizeEmbedUrl(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return '';
+
+    const ytMatch = raw.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/i);
+    if (ytMatch) return 'https://www.youtube.com/embed/' + ytMatch[1];
+
+    const ytEmbedMatch = raw.match(/youtube\.com\/embed\/([^?&/]+)/i);
+    if (ytEmbedMatch) return 'https://www.youtube.com/embed/' + ytEmbedMatch[1];
+
+    const vimeoMatch = raw.match(/vimeo\.com\/(\d+)/i);
+    if (vimeoMatch) return 'https://player.vimeo.com/video/' + vimeoMatch[1];
+
+    return raw;
+  }
+
+  function renderMotivationWall() {
+    const imageEl = document.getElementById('motivationImage');
+    const quoteEl = document.getElementById('motivationQuote');
+    const infoEl = document.getElementById('motivationRefreshInfo');
+    if (!imageEl || !quoteEl) return;
+
+    const state = getMotivationState();
+    imageEl.src = getMotivationImageUrl(state.imageSeed);
+    imageEl.alt = 'Motivational visual ' + state.imageSeed;
+    quoteEl.textContent = motivationQuotes[state.quoteIndex % motivationQuotes.length];
+
+    if (infoEl) {
+      infoEl.textContent = 'Visuals rotate automatically every 15 minutes, and quotes keep moving while you work.';
+    }
+  }
+
+  function refreshMotivationWall() {
+    const state = getMotivationState();
+    state.imageSeed = 'focus-' + Date.now();
+    saveMotivationState(state);
+    renderMotivationWall();
+    showToast('Motivation visual refreshed.', 'success');
+  }
+
+  function nextMotivationQuote() {
+    const state = getMotivationState();
+    state.quoteIndex = (state.quoteIndex + 1) % motivationQuotes.length;
+    saveMotivationState(state);
+    renderMotivationWall();
+  }
+
+  function renderMotivationEmbed() {
+    const input = document.getElementById('motivationEmbedUrl');
+    const frame = document.getElementById('motivationVideoFrame');
+    const help = document.getElementById('motivationEmbedHelp');
+    if (!input || !frame) return;
+
+    const url = localStorage.getItem(MOTIVATION_EMBED_KEY) || '';
+    input.value = url;
+    frame.src = url || 'about:blank';
+    if (help) {
+      help.textContent = url
+        ? 'Current embed is active. If a site blocks iframe embedding, try a YouTube / Vimeo embed link.'
+        : 'Tip: paste a YouTube / Vimeo link or embed URL. Some sites block embedding for security reasons.';
+    }
+  }
+
+  function applyMotivationEmbed() {
+    const input = document.getElementById('motivationEmbedUrl');
+    if (!input) return;
+
+    const normalized = normalizeEmbedUrl(input.value);
+    localStorage.setItem(MOTIVATION_EMBED_KEY, normalized);
+    renderMotivationEmbed();
+    showToast(normalized ? 'Embed updated.' : 'Embed cleared.', 'success');
+  }
+
+  function startMotivationAutoRefresh() {
+    if (motivationImageInterval) clearInterval(motivationImageInterval);
+    if (motivationQuoteInterval) clearInterval(motivationQuoteInterval);
+
+    motivationImageInterval = setInterval(() => {
+      const state = getMotivationState();
+      state.imageSeed = 'focus-' + Date.now();
+      saveMotivationState(state);
+      renderMotivationWall();
+    }, 15 * 60 * 1000);
+
+    motivationQuoteInterval = setInterval(() => {
+      const state = getMotivationState();
+      state.quoteIndex = (state.quoteIndex + 1) % motivationQuotes.length;
+      saveMotivationState(state);
+      renderMotivationWall();
+    }, 45 * 1000);
+  }
+
+  function getCurrentProjectNumber() {
+    const week = getCurrentWeek();
+    if (week <= 2) return 1;
+    if (week <= 4) return 2;
+    if (week <= 6) return 3;
+    return 4;
+  }
+
+  function getProjectMeta(projectNumber) {
+    const map = {
+      1: 'AIAS',
+      2: 'VisionRAG',
+      3: 'MLPulse',
+      4: 'NeuralNexus'
+    };
+    return { number: projectNumber, name: map[projectNumber] || ('Project ' + projectNumber) };
+  }
+
+  function getProjectNameStorageKey(projectNumber) {
+    return PROJECT_NAME_KEY + projectNumber;
+  }
+
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function round1(value) {
+    return Math.round(value * 10) / 10;
+  }
+
+  function createEmptySkillGains() {
+    return {
+      'Python': 0,
+      'PyTorch': 0,
+      'Computer Vision': 0,
+      'NLP / Transformers': 0,
+      'RAG / Vector DB': 0,
+      'MLOps / Deploy': 0
+    };
+  }
+
+  function addSkillGain(target, skillName, amount) {
+    if (!target[skillName]) target[skillName] = 0;
+    target[skillName] += amount;
+  }
+
+  function getKeywordSkillWeights(text) {
+    const value = String(text || '').toLowerCase();
+    const weights = createEmptySkillGains();
+
+    if (/(computer vision|opencv|yolo|cnn|detection|segmentation|vision model|image|cv\b)/i.test(value)) {
+      addSkillGain(weights, 'Computer Vision', 1);
+      addSkillGain(weights, 'PyTorch', 0.35);
+      addSkillGain(weights, 'Python', 0.15);
+    }
+
+    if (/(deep learning|pytorch|autograd|tensor|neural|training|fine[- ]?tuning)/i.test(value)) {
+      addSkillGain(weights, 'PyTorch', 1);
+      addSkillGain(weights, 'Python', 0.2);
+    }
+
+    if (/(nlp|transformer|bert|llm|prompt|embedding|token|attention|language model)/i.test(value)) {
+      addSkillGain(weights, 'NLP / Transformers', 1);
+      addSkillGain(weights, 'Python', 0.15);
+    }
+
+    if (/(rag|vector db|vectordb|qdrant|chroma|retrieval|rerank|chunk|embedding search)/i.test(value)) {
+      addSkillGain(weights, 'RAG / Vector DB', 1);
+      addSkillGain(weights, 'NLP / Transformers', 0.3);
+      addSkillGain(weights, 'Python', 0.15);
+    }
+
+    if (/(mlops|deploy|deployment|docker|fastapi|api|monitoring|grafana|prometheus|ci\/cd|github actions|serving|inference server)/i.test(value)) {
+      addSkillGain(weights, 'MLOps / Deploy', 1);
+      addSkillGain(weights, 'Python', 0.2);
+    }
+
+    if (/(python|script|automation|debug|refactor)/i.test(value)) {
+      addSkillGain(weights, 'Python', 0.45);
+    }
+
+    return weights;
+  }
+
+  function getProjectSkillWeights(projectNumber) {
+    const weights = createEmptySkillGains();
+
+    if (projectNumber === 1) {
+      addSkillGain(weights, 'Computer Vision', 1);
+      addSkillGain(weights, 'PyTorch', 0.45);
+      addSkillGain(weights, 'Python', 0.2);
+    } else if (projectNumber === 2) {
+      addSkillGain(weights, 'RAG / Vector DB', 1);
+      addSkillGain(weights, 'NLP / Transformers', 0.45);
+      addSkillGain(weights, 'Python', 0.15);
+    } else if (projectNumber === 3) {
+      addSkillGain(weights, 'MLOps / Deploy', 1);
+      addSkillGain(weights, 'Python', 0.3);
+      addSkillGain(weights, 'Computer Vision', 0.12);
+    } else {
+      addSkillGain(weights, 'Python', 0.4);
+      addSkillGain(weights, 'MLOps / Deploy', 0.25);
+      addSkillGain(weights, 'NLP / Transformers', 0.2);
+      addSkillGain(weights, 'RAG / Vector DB', 0.15);
+    }
+
+    return weights;
+  }
+
+  function mergeWeightedSkillGains(target, source, factor) {
+    Object.keys(source).forEach(skillName => {
+      if (!source[skillName]) return;
+      addSkillGain(target, skillName, source[skillName] * factor);
+    });
+  }
+
+  function buildSkillGrowthPlan(payload) {
+    const gains = createEmptySkillGains();
+    const hours = clamp(Number(payload.hours) || 0, 0, 12);
+    const tasks = clamp(Number(payload.tasksCompleted) || 0, 0, 12);
+    const difficulty = clamp(Number(payload.difficulty) || 3, 1, 5);
+    const effortFactor = clamp(0.3 + (hours * 0.08) + (tasks * 0.035) + ((difficulty - 3) * 0.04), 0.25, 1.45);
+    const focusWeights = getKeywordSkillWeights(payload.focusArea);
+    const noteWeights = getKeywordSkillWeights(payload.notes);
+    const projectWeights = getProjectSkillWeights(getCurrentProjectNumber());
+
+    mergeWeightedSkillGains(gains, focusWeights, effortFactor);
+    mergeWeightedSkillGains(gains, noteWeights, effortFactor * 0.35);
+    mergeWeightedSkillGains(gains, projectWeights, effortFactor * 0.22);
+
+    if (!Object.values(focusWeights).some(value => value > 0)) {
+      addSkillGain(gains, 'Python', effortFactor * 0.15);
+    }
+
+    return Object.entries(gains)
+      .map(([skillName, amount]) => ({ skillName, amount: round1(clamp(amount, 0, 1.8)) }))
+      .filter(item => item.amount >= 0.1)
+      .sort((a, b) => b.amount - a.amount);
+  }
+
+  async function applyDailySkillGrowth(payload) {
+    if (!window.DB || !window.DB.UserSkills) return [];
+
+    const growthPlan = buildSkillGrowthPlan(payload);
+    if (!growthPlan.length) return [];
+
+    const { data: skills } = await window.DB.UserSkills.getAll();
+    const safeSkills = Array.isArray(skills) ? skills : [];
+    const skillMap = safeSkills.reduce((acc, skill) => {
+      acc[skill.skill_name] = skill;
+      return acc;
+    }, {});
+
+    const applied = [];
+    for (const item of growthPlan) {
+      const currentSkill = skillMap[item.skillName];
+      if (!currentSkill) continue;
+      const currentLevel = Number(currentSkill.skill_level) || 0;
+      const nextLevel = round1(clamp(currentLevel + item.amount, 0, 100));
+      if (nextLevel <= currentLevel) continue;
+      await window.DB.UserSkills.updateByName(item.skillName, nextLevel);
+      applied.push({
+        skillName: item.skillName,
+        gain: round1(nextLevel - currentLevel),
+        nextLevel
+      });
+    }
+
+    return applied;
+  }
+
+  function getChecklistItemScope(el) {
+    return el.dataset.scope || 'daily';
+  }
+
+  function getChecklistItemId(el, index) {
+    return el.dataset.checkId || ('item-' + index);
+  }
+
+  function setCheckVisual(el, checked) {
+    el.classList.toggle('checked', checked);
+    const box = el.querySelector('.check-box');
+    if (box) box.textContent = checked ? '✓' : '';
+  }
+
+  function getChecklistStorageKey(scope) {
+    if (scope === 'weekly') return 'weekly_checklist_w' + getCurrentWeek();
+    if (scope === 'project') return 'project_checklist_p' + getCurrentProjectNumber();
+    return CHECKLIST_KEY;
+  }
+
+  function saveChecklistState() {
+    const grouped = { daily: {}, weekly: {}, project: {} };
+    document.querySelectorAll('.check-item').forEach((el, index) => {
+      const scope = getChecklistItemScope(el);
+      grouped[scope][getChecklistItemId(el, index)] = el.classList.contains('checked');
+    });
+    writeJsonStorage(getChecklistStorageKey('daily'), grouped.daily);
+    writeJsonStorage(getChecklistStorageKey('weekly'), grouped.weekly);
+    writeJsonStorage(getChecklistStorageKey('project'), grouped.project);
+  }
+
+  function refreshChecklistUi() {
+    totalPoints = 0;
+    document.querySelectorAll('.check-item').forEach(el => {
+      if (el.classList.contains('checked')) totalPoints += parseInt(el.dataset.pts || '1', 10);
+    });
+    updateScore();
+    ['morning','afternoon','project','review','weekly-summary','project-summary'].forEach(id => updateScoreLabel(id));
+  }
+
+  function loadChecklistState() {
+    const savedDaily = readJsonStorage(getChecklistStorageKey('daily'), {});
+    const savedWeekly = readJsonStorage(getChecklistStorageKey('weekly'), {});
+    const savedProject = readJsonStorage(getChecklistStorageKey('project'), {});
+
+    document.querySelectorAll('.check-item').forEach((el, index) => {
+      const scope = getChecklistItemScope(el);
+      const id = getChecklistItemId(el, index);
+      const checked = scope === 'weekly' ? savedWeekly[id] : scope === 'project' ? savedProject[id] : savedDaily[id];
+      setCheckVisual(el, Boolean(checked));
+    });
+
+    ['morning','afternoon','project','review','weekly-summary','project-summary'].forEach(id => {
+      const body = document.getElementById('body-' + id);
+      if (body && body.querySelectorAll('.check-item.checked').length > 0 && !id.includes('summary')) body.classList.add('open');
+    });
+
+    refreshChecklistUi();
+  }
+
+  function toggleCheck(el, pts) {
+    const next = !el.classList.contains('checked');
+    if (!el.dataset.pts && pts != null) el.dataset.pts = String(pts);
+    setCheckVisual(el, next);
+    refreshChecklistUi();
+    saveChecklistState();
+  }
+
+  function resetDay() {
+    if (!confirm('Reset all daily checklist items for today?')) return;
+    document.querySelectorAll('.check-item').forEach(el => {
+      if (getChecklistItemScope(el) === 'daily') setCheckVisual(el, false);
+    });
+    localStorage.removeItem(getChecklistStorageKey('daily'));
+    resetPomodoro();
+    refreshChecklistUi();
+    saveChecklistState();
+  }
+
+  function updateScore() {
+    const totalItems = document.querySelectorAll('.check-item').length;
+    const checkedItems = document.querySelectorAll('.check-item.checked').length;
+    document.getElementById('total-points').textContent = totalPoints;
+    const maxPts = Math.max(1, Array.from(document.querySelectorAll('.check-item')).reduce((sum, el) => sum + parseInt(el.dataset.pts || '1', 10), 0));
+    const pct = Math.min(100, Math.round(totalPoints / maxPts * 100));
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-text').textContent = checkedItems + ' / ' + totalItems + ' active checklist items';
+  }
+
+  function updateScoreForDay(el) {
+    const body = el.closest('.checklist-body');
+    const id = body.id.replace('body-', '');
+    updateScoreLabel(id);
+  }
+
+  function updateScoreLabel(id) {
+    const body = document.getElementById('body-' + id);
+    const score = document.getElementById('score-' + id);
+    if (body && score) score.textContent = body.querySelectorAll('.check-item.checked').length + '/' + body.querySelectorAll('.check-item').length;
+  }
+
+  function setPomodoroChecklistState(checked) {
+    const item = Array.from(document.querySelectorAll('.check-item')).find(el => {
+      const text = el.querySelector('.check-text');
+      return text && (text.textContent.includes('Pomodoro cycles') || text.textContent.includes('uninterrupted focus block'));
+    });
+    if (!item) return;
+    setCheckVisual(item, checked);
+    refreshChecklistUi();
+    saveChecklistState();
+  }
+
+  function renderPomodoro() {
+    if (!document.getElementById('pomodoroMode')) return;
+    const minutes = String(Math.floor(pomodoroState.secondsLeft / 60)).padStart(2, '0');
+    const seconds = String(pomodoroState.secondsLeft % 60).padStart(2, '0');
+    const modeText = pomodoroState.mode === 'focus' ? 'Focus Block' : 'Reset Break';
+    document.getElementById('pomodoroMode').textContent = modeText;
+    document.getElementById('pomodoroTime').textContent = minutes + ':' + seconds;
+    document.getElementById('pomodoroCycles').textContent = pomodoroState.cyclesCompleted;
+    document.getElementById('pomodoroPhaseLabel').textContent = pomodoroState.mode === 'focus' ? 'FOCUS' : 'BREAK';
+    document.getElementById('pomodoroStatus').textContent = pomodoroState.running
+      ? (pomodoroState.mode === 'focus' ? 'Stay inside one task until this block ends.' : 'Recovery window. Stand up and reset.')
+      : 'Run 25/5 cycles and let the timer keep score for you.';
+    document.getElementById('pomodoroStartBtn').textContent = pomodoroState.running ? 'Pause' : 'Start';
+    writeJsonStorage(POMODORO_KEY, pomodoroState);
+  }
+
+  function stopPomodoroTicker() {
+    if (pomodoroInterval) {
+      clearInterval(pomodoroInterval);
+      pomodoroInterval = null;
+    }
+  }
+
+  function advancePomodoroPhase() {
+    if (pomodoroState.mode === 'focus') {
+      pomodoroState.cyclesCompleted += 1;
+      pomodoroState.mode = 'break';
+      pomodoroState.secondsLeft = 5 * 60;
+      if (pomodoroState.cyclesCompleted >= 4) setPomodoroChecklistState(true);
+      showToast('Focus block done. Take the break seriously.', 'success');
+    } else {
+      pomodoroState.mode = 'focus';
+      pomodoroState.secondsLeft = 25 * 60;
+      showToast('Break over. Back to the main task.', 'info');
+    }
+    renderPomodoro();
+  }
+
+  function startPomodoroTicker() {
+    stopPomodoroTicker();
+    pomodoroInterval = setInterval(() => {
+      if (!pomodoroState.running) return;
+      if (pomodoroState.secondsLeft <= 0) {
+        advancePomodoroPhase();
+        return;
+      }
+      pomodoroState.secondsLeft -= 1;
+      renderPomodoro();
+    }, 1000);
+  }
+
+  function togglePomodoro() {
+    pomodoroState.running = !pomodoroState.running;
+    renderPomodoro();
+    if (pomodoroState.running) startPomodoroTicker();
+  }
+
+  function resetPomodoro() {
+    stopPomodoroTicker();
+    pomodoroState = { mode: 'focus', secondsLeft: 25 * 60, running: false, cyclesCompleted: 0 };
+    renderPomodoro();
+    setPomodoroChecklistState(false);
+  }
+
+  function skipPomodoroPhase() {
+    advancePomodoroPhase();
+  }
+
+  function loadPomodoroState() {
+    const saved = readJsonStorage(POMODORO_KEY, pomodoroState);
+    pomodoroState = {
+      mode: saved.mode === 'break' ? 'break' : 'focus',
+      secondsLeft: Number.isFinite(Number(saved.secondsLeft)) ? Number(saved.secondsLeft) : 25 * 60,
+      running: false,
+      cyclesCompleted: Number.isFinite(Number(saved.cyclesCompleted)) ? Number(saved.cyclesCompleted) : 0
+    };
+    renderPomodoro();
+  }
+
+  async function refreshStats() {
+    if (!window.DB) return;
+    try {
+      const stats = await window.DB.DailyLogs.getStats();
+      const { data: rewards } = await window.DB.RewardsLog.getAll();
+      const { data: logs } = await window.DB.DailyLogs.getAll();
+      const { data: weeklyReports } = await window.DB.WeeklyReports.getAll();
+      const { data: projectSummaries } = await window.DB.ProjectSummaries.getAll();
+
+      let rewardPts = 0;
+      if (rewards) rewards.forEach(r => rewardPts += (r.points || 0));
+      let checklistPts = 0;
+      if (logs) logs.forEach(log => checklistPts += ((log.checklist && log.checklist.totalPoints) || 0));
+
+      if (document.getElementById('statHours')) document.getElementById('statHours').textContent = stats.totalHours;
+      if (document.getElementById('statStreak')) document.getElementById('statStreak').textContent = stats.currentStreak;
+      if (document.getElementById('statPoints')) document.getElementById('statPoints').textContent = rewardPts + checklistPts;
+      if (document.getElementById('statWeeklyReports')) document.getElementById('statWeeklyReports').textContent = (weeklyReports || []).length;
+      if (document.getElementById('statProjectSummaries')) document.getElementById('statProjectSummaries').textContent = (projectSummaries || []).length;
+
+      summaryCache.weeklyReports = weeklyReports || [];
+      summaryCache.projectSummaries = projectSummaries || [];
+      renderSummaryStatuses();
+      return stats;
+    } catch (e) {
+      console.log('Stats error:', e);
+    }
+  }
+
+  function renderSummaryStatuses() {
+    const currentWeek = getCurrentWeek();
+    const currentProject = getCurrentProjectNumber();
+    const projectMeta = getProjectMeta(currentProject);
+    const weekReport = summaryCache.weeklyReports.find(item => Number(item.week_number) === currentWeek);
+    const projectSummary = summaryCache.projectSummaries.find(item => Number(item.project_number) === currentProject);
+    const customProjectName = localStorage.getItem(getProjectNameStorageKey(currentProject)) || '';
+    const resolvedProjectName = customProjectName || (projectSummary && projectSummary.project_name) || projectMeta.name;
+
+    if (document.getElementById('weeklySummaryTitle')) {
+      document.getElementById('weeklySummaryTitle').textContent = 'Week ' + currentWeek + ' Review Checklist';
+    }
+    if (document.getElementById('projectSummaryTitle')) {
+      document.getElementById('projectSummaryTitle').textContent = 'Project ' + currentProject + ' Summary - ' + resolvedProjectName;
+    }
+    if (document.getElementById('weeklySyncStatus')) {
+      document.getElementById('weeklySyncStatus').textContent = weekReport ? 'Synced' : 'Not synced';
+    }
+    if (document.getElementById('projectSyncStatus')) {
+      document.getElementById('projectSyncStatus').textContent = projectSummary ? 'Synced' : 'Not synced';
+    }
+    if (weekReport && document.getElementById('weeklySummaryNote') && !document.getElementById('weeklySummaryNote').value) {
+      document.getElementById('weeklySummaryNote').value = weekReport.summary_text || '';
+    }
+    if (projectSummary && document.getElementById('projectSummaryNote') && !document.getElementById('projectSummaryNote').value) {
+      document.getElementById('projectSummaryNote').value = projectSummary.summary_text || '';
+    }
+    if (document.getElementById('projectSummaryName')) {
+      document.getElementById('projectSummaryName').value = resolvedProjectName || '';
+    }
+  }
+
+  function loadCalendar() {
+    const list = document.getElementById('calendarList');
+    if (!list) return;
+
+    const items = readJsonStorage(CALENDAR_KEY, []).sort((a, b) => String(a.dateTime || '').localeCompare(String(b.dateTime || '')));
+    if (!items.length) {
+      list.innerHTML = '<div class="calendar-empty">No calendar items yet. Add your next study block, class, or deadline here.</div>';
+      return;
+    }
+
+    list.innerHTML = items.map(item => {
+      const dt = item.dateTime ? new Date(item.dateTime) : null;
+      const when = dt && !Number.isNaN(dt.getTime())
+        ? dt.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+        : 'No time set';
+      const note = (item.note || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+      const title = (item.title || 'Untitled').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return `
+        <div class="calendar-item">
+          <div class="calendar-item-time">${when}</div>
+          <div>
+            <div class="calendar-item-title">${title}</div>
+            <div class="calendar-item-note">${note || 'No note added.'}</div>
+          </div>
+          <button class="btn danger" type="button" onclick="removeCalendarItem('${item.id}')">Delete</button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function addCalendarItem() {
+    const dateTimeEl = document.getElementById('calendarDateTime');
+    const titleEl = document.getElementById('calendarTitle');
+    const noteEl = document.getElementById('calendarNote');
+    const title = titleEl.value.trim();
+    const dateTime = dateTimeEl.value;
+    const note = noteEl.value.trim();
+
+    if (!title) {
+      showToast('Calendar title is required.', 'error');
+      return;
+    }
+
+    const items = readJsonStorage(CALENDAR_KEY, []);
+    items.push({
+      id: 'cal_' + Date.now(),
+      title,
+      dateTime,
+      note
+    });
+    writeJsonStorage(CALENDAR_KEY, items);
+
+    titleEl.value = '';
+    noteEl.value = '';
+    dateTimeEl.value = '';
+    loadCalendar();
+    showToast('Calendar item added.', 'success');
+  }
+
+  function removeCalendarItem(id) {
+    const items = readJsonStorage(CALENDAR_KEY, []).filter(item => item.id !== id);
+    writeJsonStorage(CALENDAR_KEY, items);
+    loadCalendar();
+  }
+
+  async function saveWeeklySummary() {
+    const body = document.getElementById('body-weekly-summary');
+    const items = Array.from(body.querySelectorAll('.check-item'));
+    const allDone = items.length > 0 && items.every(item => item.classList.contains('checked'));
+    if (!allDone) {
+      showToast('Complete the weekly review checklist first.', 'error');
+      return;
+    }
+
+    const weekNumber = getCurrentWeek();
+    const existing = summaryCache.weeklyReports.find(item => Number(item.week_number) === weekNumber);
+    const summaryText = document.getElementById('weeklySummaryNote').value.trim();
+    await window.DB.WeeklyReports.upsert({
+      id: existing && existing.id,
+      weekNumber,
+      title: 'Weekly Review - Week ' + weekNumber,
+      summaryText,
+      checklist: items.reduce((acc, item, index) => {
+        acc[getChecklistItemId(item, index)] = item.classList.contains('checked');
+        return acc;
+      }, {}),
+      pointsAwarded: 12
+    });
+
+    if (!existing) {
+      await window.DB.RewardsLog.create({
+        type: 'reward',
+        title: 'Weekly Review Synced',
+        description: 'Week ' + weekNumber + ' review was synced to the AI Tracker.',
+        triggeredBy: 'weekly_review_sync',
+        points: 12
+      });
+    }
+
+    await refreshStats();
+    showToast('Weekly review synced to AI Tracker.', 'success');
+  }
+
+  async function saveProjectSummary() {
+    const body = document.getElementById('body-project-summary');
+    const items = Array.from(body.querySelectorAll('.check-item'));
+    const allDone = items.length > 0 && items.every(item => item.classList.contains('checked'));
+    if (!allDone) {
+      showToast('Complete the project summary checklist first.', 'error');
+      return;
+    }
+
+    const projectNumber = getCurrentProjectNumber();
+    const projectMeta = getProjectMeta(projectNumber);
+    const customNameInput = document.getElementById('projectSummaryName');
+    const customProjectName = (customNameInput && customNameInput.value.trim()) || projectMeta.name;
+    localStorage.setItem(getProjectNameStorageKey(projectNumber), customProjectName);
+    const existing = summaryCache.projectSummaries.find(item => Number(item.project_number) === projectNumber);
+    const summaryText = document.getElementById('projectSummaryNote').value.trim();
+    await window.DB.ProjectSummaries.upsert({
+      id: existing && existing.id,
+      projectNumber,
+      projectName: customProjectName,
+      title: 'Project ' + projectNumber + ' Summary',
+      summaryText,
+      checklist: items.reduce((acc, item, index) => {
+        acc[getChecklistItemId(item, index)] = item.classList.contains('checked');
+        return acc;
+      }, {}),
+      pointsAwarded: 18
+    });
+
+    if (!existing) {
+      await window.DB.RewardsLog.create({
+        type: 'reward',
+        title: 'Project Summary Synced',
+        description: customProjectName + ' summary was synced to the AI Tracker.',
+        triggeredBy: 'project_summary_sync',
+        points: 18
+      });
+    }
+
+    await refreshStats();
+    showToast('Project summary synced to AI Tracker.', 'success');
+  }
+
+  async function submitEnhancedDailyReport(e) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const btn = form.querySelector('.submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+
+    try {
+      if (!window.DB || !window.DB.DailyLogs) throw new Error('Database client is not available');
+
+      const checked = Array.from(document.querySelectorAll('.check-item')).filter(item => {
+        const scope = getChecklistItemScope(item);
+        return (scope === 'daily' || !item.dataset.scope) && item.classList.contains('checked');
+      }).length;
+
+      const focusVal = document.getElementById('focus').value;
+      const manualFocusValue = document.getElementById('manualFocus') ? document.getElementById('manualFocus').value.trim() : '';
+      const payload = {
+        date: new Date().toISOString().split('T')[0],
+        hours: parseFloat(document.getElementById('hours').value) || 0,
+        tasksCompleted: parseInt(document.getElementById('tasks').value) || checked,
+        focusArea: focusVal === '__manual__' ? (manualFocusValue || 'Other') : focusVal,
+        difficulty: parseInt(document.getElementById('difficulty').value) || 3,
+        mood: 'okay',
+        energyLevel: 3,
+        notes: document.getElementById('notes').value,
+        checklist: {
+          totalPoints,
+          checkedItems: checked,
+          pomodoroCycles: pomodoroState.cyclesCompleted,
+          weeklySummarySynced: summaryCache.weeklyReports.some(item => Number(item.week_number) === getCurrentWeek()),
+          projectSummarySynced: summaryCache.projectSummaries.some(item => Number(item.project_number) === getCurrentProjectNumber())
+        },
+        weekNumber: getCurrentWeek()
+      };
+
+      const { error } = await window.DB.DailyLogs.create(payload);
+      if (error) throw error;
+
+      let skillUpdates = [];
+      try {
+        skillUpdates = await applyDailySkillGrowth(payload);
+      } catch (skillError) {
+        console.warn('Skill growth update failed:', skillError);
+      }
+
+      let stats = { totalHours: 0, currentStreak: 0, totalTasks: 0 };
+      let triggered = [];
+
+      try {
+        stats = await window.DB.DailyLogs.getStats();
+      } catch (statsError) {
+        console.warn('Stats refresh after save failed:', statsError);
+      }
+
+      try {
+        triggered = await window.DB.RewardEngine.evaluate({ hours: document.getElementById('hours').value }, stats);
+      } catch (rewardError) {
+        console.warn('Reward evaluation failed:', rewardError);
+      }
+
+      closeModal();
+      await refreshStats();
+
+      if (triggered.length > 0) {
+        triggered.forEach((t, i) => {
+          const icon = t.type === 'reward' ? 'Trophy' : 'Alert';
+          setTimeout(() => showToast(icon + ': ' + t.title + ' (' + (t.points > 0 ? '+' : '') + t.points + ' pts)', t.type === 'reward' ? 'success' : 'error'), i * 700);
+        });
+      } else {
+        showToast('Daily report saved!', 'success');
+      }
+
+      if (skillUpdates.length > 0) {
+        const topUpdates = skillUpdates
+          .slice(0, 3)
+          .map(item => item.skillName + ' +' + item.gain)
+          .join(' | ');
+        setTimeout(() => showToast('Skills nudged: ' + topUpdates, 'info'), triggered.length > 0 ? 900 : 350);
+      }
+
+      form.reset();
+    } catch (err) {
+      console.error(err);
+      showToast('Error saving: ' + (err.message || 'Unknown error'), 'error');
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Save Report';
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderMotivationWall();
+    renderMotivationEmbed();
+    startMotivationAutoRefresh();
+    loadCalendar();
+    refreshStats();
+
+    const oldForm = document.getElementById('dailyProgressForm');
+    if (oldForm) {
+      const replacement = oldForm.cloneNode(true);
+      oldForm.parentNode.replaceChild(replacement, oldForm);
+      replacement.addEventListener('submit', submitEnhancedDailyReport);
+    }
+  });
+
+  function toggleManualFocusInput() {
+    const focus = document.getElementById('focus');
+    const manual = document.getElementById('manualFocus');
+    if (!focus || !manual) return;
+    const show = focus.value === '__manual__';
+    manual.classList.toggle('show', show);
+    manual.required = show;
+    if (!show) manual.value = '';
+  }
+
+  function playPomodoroSignal(mode) {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const now = ctx.currentTime;
+      const notes = mode === 'focus'
+        ? [523.25, 659.25, 783.99]
+        : [440, 523.25, 659.25];
+
+      notes.forEach((frequency, index) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const startAt = now + (index * 0.22);
+        const stopAt = startAt + 0.32;
+
+        osc.type = index === notes.length - 1 ? 'triangle' : 'sine';
+        osc.frequency.value = frequency;
+
+        gain.gain.value = 0.0001;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        gain.gain.exponentialRampToValueAtTime(0.075, startAt + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, stopAt);
+
+        osc.start(startAt);
+        osc.stop(stopAt + 0.02);
+      });
+
+      setTimeout(() => {
+        if (typeof ctx.close === 'function') ctx.close().catch(() => {});
+      }, 1200);
+    } catch (error) {
+      console.warn('Pomodoro sound failed:', error);
+    }
+  }
+
+  const originalAdvancePomodoroPhase = advancePomodoroPhase;
+  advancePomodoroPhase = function () {
+    originalAdvancePomodoroPhase();
+    playPomodoroSignal(pomodoroState.mode);
+  };
+
+  const originalSubmitEnhancedDailyReport = submitEnhancedDailyReport;
+  submitEnhancedDailyReport = async function (e) {
+    const focusVal = document.getElementById('focus')?.value;
+    const manualFocus = document.getElementById('manualFocus');
+    if (focusVal === '__manual__' && manualFocus && !manualFocus.value.trim()) {
+      e.preventDefault();
+      showToast('Write your custom focus first.', 'error');
+      return;
+    }
+    return originalSubmitEnhancedDailyReport(e);
+  };
+
+  const originalGetProjectMeta = getProjectMeta;
+  getProjectMeta = function (projectNumber) {
+    const base = originalGetProjectMeta(projectNumber);
+    const custom = localStorage.getItem(getProjectNameStorageKey(projectNumber));
+    return { number: base.number, name: custom || base.name };
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    toggleManualFocusInput();
+  });
+</script>
+
+<div style="background:var(--bg2);border-top:1px solid var(--border);padding:28px;text-align:center;margin-top:0">
+  <p style="font-size:13px;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;font-family:'JetBrains Mono',monospace">— Mindset —</p>
+  <p style="font-size:18px;font-weight:800;color:var(--amber);font-family:'Outfit',sans-serif;letter-spacing:.02em;max-width:600px;margin:0 auto;line-height:1.4">"When you understand the game, you don't panic."</p>
+</div>
+</body>
+</html>
